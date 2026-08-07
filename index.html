@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="estilo.css">
     <title>Gerardo Parizzi</title>
-    </head>
+</head>
 <body>
 
     <header>
@@ -20,55 +20,37 @@
 
         <!-- Botonera -->
         <div class="botonera">
-<!-- Botonera -->
-<!-- Botonera -->
-<div class="botonera">
-    <a href="modelados.html" class="boton">Modelados</a>
-    <a href="calculos.html" class="boton">Cálculos Estructurales</a>
-    <a href="comunicacion.html" class="boton">Comunicación</a>
-    <button onclick="toggleAbout()" class="boton" style="cursor:pointer; background:none; font:inherit;">Acerca mío</button>
-</div>
-
-<!-- Sección oculta de Acerca mío (FUERA de la botonera) -->
-<div id="about-section" style="display: none; margin-top: 30px; padding: 30px; border: 1px solid #ccc; background: #fff; border-radius: 8px; color: #000; text-align: left;">
-    <h3>Acerca mío</h3>
-    <p>Soy arquitecto desde hace ya más de cuarenta años. Pienso que la arquitectura es la disciplina que suma los conocimientos de arte y ciencia con el fin de brindar soluciones a nuestro devenir cotidiano, en todos los ámbitos en que los seres humanos estemos involucrados.</p>
-    <p>La búsqueda y encuentro de la solución a un problema específico se realiza a través de una herramienta fundamental:</p>
-    <h3>El Diseño</h3>
-    <p>Diseñar es el acto de dar respuesta a un desajuste.</p>
-    <p>El objetivo es lograr la excelencia. Algo superior al lujo, pero no necesariamente costoso.</p>
-    <h3>¿Forma o función?</h3>
-    <p>Pues ambas. No encuentro la más mínima razón para que una excluya a la otra.</p>
-</div>
-</div>
-
-<!-- Sección oculta de Acerca mío -->
-<div id="about-section" style="display: none; margin-top: 20px; padding: 20px; border: 1px solid #ccc; background: #fff; border-radius: 8px; text-align: left;">
-    <h3>Acerca mío</h3>
-    <p>Soy arquitecto desde hace ya más de cuarenta años. Pienso que la arquitectura es la disciplina que suma los conocimientos de arte y ciencia con el fin de brindar soluciones a nuestro devenir cotidiano, en todos los ámbitos en que los seres humanos estemos involucrados.</p>
-    <p>La búsqueda y encuentro de la solución a un problema específico se realiza a través de una herramienta fundamental:</p>
-    <h3>El Diseño</h3>
-    <p>Diseñar es el acto de dar respuesta a un desajuste.</p>
-    <p>El objetivo es lograr la excelencia. Algo superior al lujo, pero no necesariamente costoso.</p>
-    <h3>¿Forma o función?</h3>
-    <p>Pues ambas. No encuentro la más mínima razón para que una excluya a la otra.</p>
-</div>
-
-<script>
-function toggleAbout() {
-    var x = document.getElementById("about-section");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-</script>
-
-
-            
+            <a href="modelados.html" class="boton">Modelados</a>
+            <a href="calculos.html" class="boton">Cálculos Estructurales</a>
+            <a href="comunicacion.html" class="boton">Comunicación</a>
+            <button onclick="toggleAbout()" class="boton" style="cursor:pointer; background:none; font:inherit;">Acerca mío</button>
         </div>
+
+        <!-- Sección oculta de Acerca mío (FUERA de la botonera) -->
+        <div id="about-section" style="display: none; margin-top: 30px; padding: 30px; border: 1px solid #ccc; background: #fff; border-radius: 8px; color: #000; text-align: left;">
+            <h3>Acerca mío</h3>
+            <p>Soy arquitecto desde hace ya más de cuarenta años. Pienso que la arquitectura es la disciplina que suma los conocimientos de arte y ciencia con el fin de brindar soluciones a nuestro devenir cotidiano, en todos los ámbitos en que los seres humanos estemos involucrados.</p>
+            <p>La búsqueda y encuentro de la solución a un problema específico se realiza a través de una herramienta fundamental:</p>
+            <h3>El Diseño</h3>
+            <p>Diseñar es el acto de dar respuesta a un desajuste.</p>
+            <p>El objetivo es lograr la excelencia. Algo superior al lujo, pero no necesariamente costoso.</p>
+            <h3>¿Forma o función?</h3>
+            <p>Pues ambas. No encuentro la más mínima razón para que una excluya a la otra.</p>
+        </div>
+
     </main>
+
+    <script>
+    function toggleAbout() {
+        var x = document.getElementById("about-section");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+    </script>
 
 </body>
 </html>
+            
