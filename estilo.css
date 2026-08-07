@@ -33,3 +33,22 @@ p {
     line-height: 1.6;
     color: #b0b0b0;
 }
+.botonera {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.boton {
+    background-color: #333;
+    color: #ffffff;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.boton:hover {
+    background-color: #555;
+}
