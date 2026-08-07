@@ -1,9 +1,37 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="estilo.css">
     <title>Modelados - Gerardo Parizzi</title>
+    <style>
+        /* Estilos específicos para la galería de logos */
+        .logo-gallery {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 20px;
+        }
+        .logo-item {
+            text-align: center;
+            width: 150px; /* Tamaño base de cada contenedor */
+        }
+        .logo-item img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .logo-title {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
 
@@ -14,35 +42,39 @@
     <main>
         <h1>Modelados</h1>
         <p>Espacio dedicado a la visualización de proyectos, volúmenes y geometrías digitales.</p>
+        <p>Herramientas de software principales utilizadas en el flujo de trabajo:</p>
         
-        <!-- Galería de Software 3D -->
-        <div style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px;">
+        <!-- Galería de Logos de Software -->
+        <div class="logo-gallery">
             
-            <!-- Tarjeta 3ds Max -->
-            <div style="background: #fff; padding: 15px; border-radius: 8px; width: 280px; color: #000; text-align: left; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                <img src="boseto-01.jpg" alt="3ds Max" style="width: 100%; border-radius: 4px; height: 160px; object-fit: cover;">
-                <h3 style="margin-top: 15px; font-size: 18px;">3ds Max</h3>
-                <p style="font-size: 14px; color: #555;">Modelado avanzado, renderizado y visualización fotorrealista de proyectos.</p>
+            <!-- AutoCAD -->
+            <div class="logo-item">
+                <img src="ruta/a/tu/imagen_de_autocad.png" alt="AutoCAD Logo">
+                <div class="logo-title">AutoCAD</div>
             </div>
 
-            <!-- Tarjeta Rhinoceros -->
-            <div style="background: #fff; padding: 15px; border-radius: 8px; width: 280px; color: #000; text-align: left; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                <img src="boseto-01.jpg" alt="Rhinoceros" style="width: 100%; border-radius: 4px; height: 160px; object-fit: cover;">
-                <h3 style="margin-top: 15px; font-size: 18px;">Rhinoceros</h3>
-                <p style="font-size: 14px; color: #555;">Modelado de superficies complejas, geometrías orgánicas y diseño paramétrico.</p>
+            <!-- 3ds Max -->
+            <div class="logo-item">
+                <img src="ruta/a/tu/imagen_de_3dsmax.png" alt="3ds Max Logo">
+                <div class="logo-title">3ds Max</div>
             </div>
 
-            <!-- Tarjeta SketchUp -->
-            <div style="background: #fff; padding: 15px; border-radius: 8px; width: 280px; color: #000; text-align: left; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                <img src="boseto-01.jpg" alt="SketchUp" style="width: 100%; border-radius: 4px; height: 160px; object-fit: cover;">
-                <h3 style="margin-top: 15px; font-size: 18px;">SketchUp</h3>
-                <p style="font-size: 14px; color: #555;">Desarrollo volumétrico rápido, volumetrías urbanas y estudios espaciales.</p>
+            <!-- Rhinoceros -->
+            <div class="logo-title">
+                <img src="ruta/a/tu/imagen_de_rhino.png" alt="Rhinoceros Logo">
+                <div class="logo-title">Rhino</div>
+            </div>
+
+            <!-- SketchUp -->
+            <div class="logo-item">
+                <img src="ruta/a/tu/imagen_de_sketchup.png" alt="SketchUp Logo">
+                <div class="logo-title">SketchUp</div>
             </div>
 
         </div>
 
         <!-- Botón para volver al inicio -->
-        <div style="margin-top: 40px;">
+        <div style="margin-top: 50px;">
             <a href="index.html" class="boton" style="display: inline-block; text-decoration: none; padding: 10px 20px; background: #333; color: #fff; border-radius: 5px;">Volver al inicio</a>
         </div>
     </main>
