@@ -1,48 +1,50 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #121212;
-    color: #e0e0e0;
+    color: white;
     margin: 0;
-    padding: 40px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header {
-    border-bottom: 2px solid #333;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 2em;
     font-weight: bold;
-    color: #ffffff;
-    letter-spacing: 1px;
 }
 
 main {
-    max-width: 800px;
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
 }
 
-h1 {
-    color: #ffffff;
-    font-size: 32px;
+/* Ajuste de la imagen para que se vea completa y no obligue a hacer scroll */
+img {
+    max-width: 100%;
+    max-height: 50vh;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-p {
-    font-size: 18px;
-    line-height: 1.6;
-    color: #b0b0b0;
-}
 .botonera {
     display: flex;
+    justify-content: center;
     gap: 15px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .boton {
     background-color: #333;
     color: #ffffff;
-    padding: 12px 24px;
+    padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
