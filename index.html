@@ -1,40 +1,49 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Galería de Gerardo Parizzi</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4; }
-        h1 { text-align: center; }
-        h2 { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 40px; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .gallery img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerardo Parizzi - Arquitectura y Proyectos</title>
+    <link rel="stylesheet" href="style5.css">
 </head>
 <body>
 
-    <h1>Mi Galería de Proyectos</h1>
+    <header>
+        <div class="logo">
+            <h1>Gerardo Parizzi</h1>
+            <p>Arquitectura y Proyectos</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="modelados.html">Modelados</a></li>
+                <li><a href="calculador.html">Cálculos Estructurales</a></li>
+                <li><a href="comunicacion.html">Comunicación</a></li>
+                <li><a href="acerca.html">Acerca mío</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <h2>3dMax</h2>
-    <div class="gallery">
-        <img src="3dMax/imagen2.jpg" alt="Imagen 2">
-        <img src="3dMax/refugio.jpg" alt="Refugio">
-        <img src="3dMax/douglas.jpg" alt="Douglas">
-        <img src="3dMax/imagen3.jpg" alt="Imagen 3">
-        <img src="3dMax/Scorpion.jpg" alt="Scorpion">
-        <img src="3dMax/Enterprise.jpg" alt="Enterprise">
-    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Bienvenidos</h2>
+            <p>Esta es mi página de calculadoras y proyectos.</p>
+        </div>
+    </section>
 
-    <h2>Rinoceronte</h2>
-    <div class="gallery">
-        <p>Carpeta Rinoceronte lista para tus imágenes.</p>
-    </div>
+    <section class="content-section">
+        <h2>Explorar Proyectos</h2>
+        <div class="gallery-grid">
+            <a href="modelados.html" class="gallery-item"><span class="image-placeholder">Ver Modelados</span></a>
+            <a href="calculador.html" class="gallery-item"><span class="image-placeholder">Cálculos Estructurales</span></a>
+            <a href="comunicacion.html" class="gallery-item"><span class="image-placeholder">Comunicación</span></a>
+            <a href="acerca.html" class="gallery-item"><span class="image-placeholder">Acerca mío</span></a>
+        </div>
+    </section>
 
-    <h2>Sketchup</h2>
-    <div class="gallery">
-        <p>Carpeta Sketchup lista para tus imágenes.</p>
-    </div>
+    <footer>
+        <p>&copy; 2026 Gerardo Parizzi. Todos los derechos reservados.</p>
+    </footer>
 
 </body>
 </html>
