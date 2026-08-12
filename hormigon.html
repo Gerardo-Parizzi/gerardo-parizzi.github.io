@@ -3,171 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Hormigón - Gerardo Parizzi</title>
+    <title>Cálculo de Hormigón Armado - Gerardo Parizzi</title>
     <style>
-        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; padding: 20px; }
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         h1 { margin-bottom: 10px; font-size: 24px; text-align: center; }
-        .subtitle { color: #888; font-style: italic; margin-bottom: 25px; text-align: center; }
-        .card { background-color: #1e1e1e; padding: 25px; border-radius: 8px; width: 100%; max-width: 500px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #ccc; font-size: 14px; }
-        select, input { width: 100%; padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #00bcd4; color: #121212; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        button:hover { background-color: #00acc1; }
-        .results { background-color: #252525; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #00bcd4; display: none; }
-        .results h3 { margin-top: 0; color: #00bcd4; font-size: 16px; }
-        .results p { margin: 8px 0; font-size: 14px; line-height: 1.4; }
-        .btn-volver { margin-top: 20px; color: #aaa; text-decoration: none; display: inline-block; }
+        .subtitle { color: #888; font-style: italic; margin-bottom: 30px; text-align: center; }
+        .menu-container { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 350px; }
+        .btn-opcion { background-color: #1e1e1e; color: #fff; border: 1px solid #333; padding: 15px; text-align: center; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 6px; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .btn-opcion:hover { background-color: #00bcd4; color: #121212; border-color: #00bcd4; }
+        .btn-volver { margin-top: 40px; color: #aaa; text-decoration: none; font-size: 14px; }
         .btn-volver:hover { color: #fff; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <h1>Calculadora de Losa de Hormigón Armado</h1>
-    <p class="subtitle">Sección de cálculos estructurales basada en diseño reglamentario.</p>
+    <h1>Cálculo de Hormigón Armado</h1>
+    <p class="subtitle">Seleccione el elemento estructural a calcular:</p>
 
-    <div class="card">
-        <div class="form-group">
-            <label for="tipoLosa">Tipo de losa:</label>
-            <select id="tipoLosa" onchange="cambiarTipo()">
-                <option value="u">Unidireccional</option>
-                <option value="b">Bidireccional</option>
-            </select>
-        </div>
-
-        <div class="form-group" id="grupoLuzU">
-            <label for="luz">Ingrese la luz (mts) de la losa:</label>
-            <input type="number" id="luz" step="0.01" placeholder="Ej: 4.5">
-        </div>
-
-        <div class="form-group hidden" id="grupoLuzX">
-            <label for="luzX">Ingrese la luz X (mts) de la losa:</label>
-            <input type="number" id="luzX" step="0.01" placeholder="Ej: 4">
-        </div>
-
-        <div class="form-group hidden" id="grupoLuzY">
-            <label for="luzY">Ingrese la luz Y (mts) de la losa:</label>
-            <input type="number" id="luzY" step="0.01" placeholder="Ej: 5">
-        </div>
-
-        <div class="form-group">
-            <label for="destino">Destino de la losa:</label>
-            <select id="destino">
-                <option value="h">Habitación (SC = 200 kg/m²)</option>
-                <option value="b">Balcón (SC = 400 kg/m²)</option>
-                <option value="c">Cochera (SC = 400 kg/m²)</option>
-                <option value="l">Local / Comercial (SC = 500 kg/m²)</option>
-            </select>
-        </div>
-
-        <button onclick="calcularLosa()">Calcular Estructura</button>
-
-        <div id="resultados" class="results">
-            <h3>Resultados del Cálculo:</h3>
-            <div id="contenidoResultados"></div>
-        </div>
+    <div class="menu-container">
+        <a href="losa.html" class="btn-opcion">Calcular Losas</a>
+        <a href="viga.html" class="btn-opcion">Calcular Vigas</a>
+        <a href="columna.html" class="btn-opcion">Calcular Columnas</a>
+        <a href="base.html" class="btn-opcion">Calcular Bases</a>
     </div>
 
-    <a href="calculos.html" class="btn-volver">Volver a Cálculos</a>
+    <a href="calculos.html" class="btn-volver">Volver a Calculadores</a>
 
-    <script>
-        function cambiarTipo() {
-            const tipo = document.getElementById('tipoLosa').value;
-            if (tipo === 'u') {
-                document.getElementById('grupoLuzU').classList.remove('hidden');
-                document.getElementById('grupoLuzX').classList.add('hidden');
-                document.getElementById('grupoLuzY').classList.add('hidden');
-            } else {
-                document.getElementById('grupoLuzU').classList.add('hidden');
-                document.getElementById('grupoLuzX').classList.remove('hidden');
-                document.getElementById('grupoLuzY').classList.remove('hidden');
-            }
-        }
-
-        function calcularDistribucion(asCalc) {
-            let sep6 = (0.28 * 100) / asCalc;
-            let sep8 = (0.50 * 100) / asCalc;
-            let sep10 = (0.79 * 100) / asCalc;
-
-            if (sep6 > 20) sep6 = 20;
-            if (sep8 > 20) sep8 = 20;
-            if (sep10 > 20) sep10 = 20;
-
-            return `
-                &nbsp;&nbsp;• Opcion d6: poner hierro del 6 c/ ${Math.floor(sep6 * 10) / 10} cm<br>
-                &nbsp;&nbsp;• Opcion d8: poner hierro del 8 c/ ${Math.floor(sep8 * 10) / 10} cm<br>
-                &nbsp;&nbsp;• Opcion d10: poner hierro del 10 c/ ${Math.floor(sep10 * 10) / 10} cm
-            `;
-        }
-
-        function calcularLosa() {
-            const tipo = document.getElementById('tipoLosa').value;
-            const dest = document.getElementById('destino').value;
-            
-            // Cargas (CM y CV)
-            let pp, cpiso = 0.08 * 1600, cp = 100, cm, sc;
-            
-            if (dest === 'h') sc = 200;
-            else if (dest === 'b' || dest === 'c') sc = 400;
-            else if (dest === 'l') sc = 500;
-
-            let htmlRes = "";
-
-            if (tipo === 'u') {
-                let luz = parseFloat(document.getElementById('luz').value);
-                if (!luz || luz <= 0) { alert("Ingrese una luz válida."); return; }
-
-                let h = luz / 25;
-                let hc = (h * 100) - 2;
-                pp = h * 2400;
-                cm = pp + cpiso + cp;
-                let qu = (1.2 * cm) + (1.6 * sc);
-
-                let mf = qu * (luz ** 2) / 8;
-                let as = (mf * 100) / (0.9 * 4200 * (hc * 0.9));
-                let asmin = 0.18 * (h * 100);
-                if (as < asmin) as = asmin;
-
-                htmlRes += `Altura de losa calculada = <b>${h.toFixed(3)} mts</b><br>`;
-                htmlRes += `Momento Flector = <b>${mf.toFixed(2)} kg.m</b><br>`;
-                htmlRes += `Acero necesario = <b>${as.toFixed(2)} cm²/m</b><br><br>`;
-                htmlRes += `<b>Opciones de Armado:</b><br>${calcularDistribucion(as)}`;
-
-            } else {
-                let x = parseFloat(document.getElementById('luzX').value);
-                let y = parseFloat(document.getElementById('luzY').value);
-                if (!x || !y || x <= 0 || y <= 0) { alert("Ingrese luces válidas."); return; }
-
-                let h = (x * 2 + y * 2) / 120;
-                let hc = (h * 100) - 2;
-                pp = h * 2400;
-                cm = pp + cpiso + cp;
-                let qu = (1.2 * cm) + (1.6 * sc);
-
-                let qux = qu * (y ** 4) / (x ** 4 + y ** 4);
-                let quy = qu * (x ** 4) / (x ** 4 + y ** 4);
-
-                let mfx = qux * (x ** 2) / 8;
-                let mfy = quy * (y ** 2) / 8;
-
-                let asx = (mfx * 100) / (0.9 * 4200 * (hc * 0.9));
-                let asy = (mfy * 100) / (0.9 * 4200 * (hc * 0.9));
-
-                let asmin = 0.18 * (h * 100);
-                if (asx < asmin) asx = asmin;
-                if (asy < asmin) asy = asmin;
-
-                htmlRes += `Altura de losa calculada = <b>${h.toFixed(3)} mts</b><br>`;
-                htmlRes += `Momento Flector X = <b>${mfx.toFixed(2)} kg.m</b> | Acero X = <b>${asx.toFixed(2)} cm²/m</b><br>`;
-                htmlRes += `<b>Armado en Dirección X:</b><br>${calcularDistribucion(asx)}<br><br>`;
-                htmlRes += `Momento Flector Y = <b>${mfy.toFixed(2)} kg.m</b> | Acero Y = <b>${asy.toFixed(2)} cm²/m</b><br>`;
-                htmlRes += `<b>Armado en Dirección Y:</b><br>${calcularDistribucion(asy)}`;
-            }
-
-            document.getElementById('contenidoResultados').innerHTML = htmlRes;
-            document.getElementById('resultados').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
