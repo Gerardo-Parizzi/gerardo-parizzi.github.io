@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Columnas de Hormigón - Gerardo Parizzi</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; padding: 20px; }
+        h1 { margin-bottom: 10px; font-size: 24px; text-align: center; }
+        .subtitle { color: #888; font-style: italic; margin-bottom: 25px; text-align: center; }
+        .card { background-color: #1e1e1e; padding: 25px; border-radius: 8px; width: 100%; max-width: 550px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #ccc; font-size: 14px; }
+        select, input { width: 100%; padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #00bcd4; color: #121212; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #00acc1; }
+        .results { background-color: #252525; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #00bcd4; display: none; }
+        .results h3 { margin-top: 0; color: #00bcd4; font-size: 16px; }
+        .results p { margin: 8px 0; font-size: 14px; line-height: 1.4; }
+        .btn-volver { margin-top: 20px; color: #aaa; text-decoration: none; display: inline-block; }
+        .btn-volver:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <h1>COLBET 6.0 - Cálculo Automatizado de Columna</h1>
+    <p class="subtitle">Diseño inteligente y cómputo de materiales estructurales.</p>
+
+    <div class="card">
+        <div class="form-group">
+            <label for="coln">Denominación de la columna (ej: C2):</label>
+            <input type="text" id="coln" value="C1">
+        </div>
+
+        <div class="form-group">
+            <label for="N">Carga P que baja a la columna (kg):</label>
+            <input type="number" id="N" value="15000" step="100">
+        </div>
+
+        <div class="form-group">
+            <label for="h_mts">Altura libre de la columna (mts):</label>
+            <input type="number" id="h_mts" value="3.0" step="0.1">
+        </div>
+
+        <div class="form-group">
+            <label for="vdc">Valor de división para estribos (3, 4 o 5):</label>
+            <select id="vdc">
+                <option value="3">3</option>
+                <option value="4" selected>4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+        <button onclick="calcularColumna()">Calcular Columna</button>
+
+        <div id="resultados" class="results">
+            <h3>Reporte de Resultados de Obra:</h3>
+            <div id="contenidoResultados"></div>
+        </div>
+    </div>
+
+    <a href="hormigon.html" class="btn-volver">Volver a Hormigón</a>
+
+    <script>
+        function calcularColumna() {
+            let coln = document.getElementById('coln').value;
+            let N = parseFloat(document.getElementById('N').value);
+            let h_mts = parseFloat(document.getElementById('h_mts').value);
+            let vdc = parseInt(document.getElementById('vdc').value);
+
+            if (!N || N <= 0 || !h_mts || h_mts <= 0) {
+                alert("Ingrese valores válidos para la carga y la altura.");
+                return;
+            }
+
+            let fcd = 140; // H21 kg/cm2
+            let fyd = 4200; // ADN 420 kg/cm2
+
+            let lado = 15;
+            let seccion_ok = 0;
+            let seccion = 0;
+            let as_min = 0;
+
+            // Bucle para dimensionar lado óptimo
+            for (let x = 15; x <= 60; x += 5) {
+                lado = x;
+                seccion = lado * lado;
+                as_min = 0.01 * seccion;
+                let carga_admisible = 0.7 * ((seccion * 0.85 * fcd) + (as_min * fyd));
+                if (carga_admisible >= N) {
+                    seccion_ok = 1;
+                    break;
+                }
+            }
+
+            if (seccion_ok === 0) {
+                lado = 60;
+                seccion = lado * lado;
+            }
+
+            let as_nec = (N / 0.7 - (seccion * 0.85 * fcd)) / fyd;
+            as_min = 0.01 * seccion;
+            if (as_nec < as_min) as_nec = as_min;
+
+            let diametro_adoptado = 12;
+            let seccion_barra = 1.13;
+
+            if ((4 * 1.13) < as_nec) {
+                diametro_adoptado = 16;
+                seccion_barra = 2.01;
+            }
+            if ((4 * 2.01) < as_nec) {
+                diametro_adoptado = 20;
+                seccion_barra = 3.14;
+            }
+
+            let as_real_colocada = 4 * seccion_barra;
+            let hp_cm = h_mts * 100;
+            let vol_h = (seccion / 10000) * h_mts;
+            let peso_propio = vol_h * 2400;
+            let peso_total_base = N + peso_propio;
+
+            // Zonificación de estribos
+            let luz_zona = hp_cm / vdc;
+            let zona_conf = luz_zona;
+            let zona_cent = hp_cm - (2 * luz_zona);
+
+            if (vdc <= 3) {
+                zona_cent = luz_zona;
+            }
+
+            let sep_conf = 8.0;
+            let estribos_conf_zona = Math.floor(zona_conf / sep_conf) + 1;
+            let estribos_conf_total = estribos_conf_zona * 2;
+
+            let sep_cent = 20.0;
+            let estribos_cent = Math.floor(zona_cent / sep_cent) - 1;
+            if (estribos_cent < 0) estribos_cent = 0;
+
+            let total_estribos = estribos_conf_total + estribos_cent;
+
+            // Cómputo métrico (barras de 12 mts)
+            let metros_principales = 4 * h_mts;
+            let barras_principales = metros_principales / 12;
+
+            let perimetro_estribo = (lado * 4) + 10;
+            let metros_fi6 = (perimetro_estribo / 100) * total_estribos;
+            let barras_fi6 = metros_fi6 / 12;
+
+            let htmlRes = `
+                <b>COLUMNA SELECCIONADA:</b> ${coln}<br>
+                Altura de diseño = <b>${h_mts} mts</b><br>
+                Lado óptimo calculado = <b>${lado} x ${lado} cm</b><br>
+                Carga útil ingresada = <b>${N} kg</b><br>
+                Peso propio columna = <b>${peso_propio.toFixed(1)} kg</b><br>
+                CARGA TOTAL A LA BASE = <b>${peso_total_base.toFixed(1)} kg</b><br><br>
+                <b>DISEÑO DE ARMADURAS:</b><br>
+                • Hierro Principal: <b>4 barras de Ø ${diametro_adoptado} mm</b><br>
+                • Acero colocado = <b>${as_real_colocada.toFixed(2)} cm²</b> (Mínimo: ${as_nec.toFixed(2)} cm²)<br><br>
+                <b>DISTRIBUCIÓN DE ESTRIBOS (División ${vdc}):</b><br>
+                • Long. zona confinamiento (puntas) = <b>${zona_conf.toFixed(1)} cm</b><br>
+                • Long. zona central = <b>${zona_cent.toFixed(1)} cm</b><br>
+                • Estribos en confinamiento = <b>${estribos_conf_total} u.</b><br>
+                • Estribos en zona central = <b>${estribos_cent} u.</b><br>
+                • Separación puntas / centro = <b>${sep_conf} cm / ${sep_cent} cm</b><br>
+                • TOTAL ESTRIBOS Ø6 = <b>${total_estribos} u.</b><br><br>
+                <b>CÓMPUTO MÉTRICO DE MATERIALES:</b><br>
+                • Volumen de Hormigón = <b>${vol_h.toFixed(3)} m³</b><br>
+                • Barras Ø6 (de 12m) = <b>${barras_fi6.toFixed(2)} u.</b><br>
+                • Barras Ø${diametro_adoptado} (de 12m) = <b>${barras_principales.toFixed(2)} u.</b>
+            `;
+
+            document.getElementById('contenidoResultados').innerHTML = htmlRes;
+            document.getElementById('resultados').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
