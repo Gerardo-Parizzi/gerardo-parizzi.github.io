@@ -5,15 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculo de Hierro - Gerardo Parizzi</title>
     <style>
-        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        h1 { margin-bottom: 30px; }
-        .mensaje { color: #888; font-style: italic; }
-        .btn-volver { margin-top: 40px; color: #aaa; text-decoration: none; }
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        h1 { margin-bottom: 30px; font-size: 24px; text-align: center; }
+        .menu-container { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; }
+        .btn-opcion { background-color: #1e1e1e; color: #fff; border: 1px solid #333; padding: 15px; text-align: center; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 6px; transition: all 0.3s ease; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .btn-opcion:hover { background-color: #00bcd4; color: #121212; border-color: #00bcd4; }
+        .btn-volver { margin-top: 40px; color: #aaa; text-decoration: none; font-size: 14px; }
+        .btn-volver:hover { color: #fff; }
     </style>
 </head>
 <body>
-    <h1>Cálculo de Hierro</h1>
-    <p class="mensaje">Sección en desarrollo. Próximamente disponible.</p>
-    <a href="calculos.html" class="btn-volver">Volver a Cálculos</a>
+
+    <h1>Cálculo de Estructuras Metálicas</h1>
+
+    <div class="menu-container">
+        <!-- Estos enlaces apuntan a la carpeta metalica donde tenés tus scripts -->
+        <a href="CALCULADORES/metalica/perfiles-ipn.js" class="btn-opcion">Calcular Perfiles IPN</a>
+        <a href="CALCULADORES/metalica/perfiles-upn.js" class="btn-opcion">Calcular Perfiles UPN</a>
+        <a href="CALCULADORES/metalica/cerchas.js" class="btn-opcion">Calcular Cerchas</a>
+        <a href="CALCULADORES/metalica/apertura-muros.js" class="btn-opcion">Apertura de Muros</a>
+    </div>
+
+    <a href="calculos.html" class="btn-volver">Volver a Calculadores</a>
+
 </body>
 </html>
