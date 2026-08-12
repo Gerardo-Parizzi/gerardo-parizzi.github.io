@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Vigas de Hormigón - Gerardo Parizzi</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; padding: 20px; }
+        h1 { margin-bottom: 10px; font-size: 24px; text-align: center; }
+        .subtitle { color: #888; font-style: italic; margin-bottom: 25px; text-align: center; }
+        .card { background-color: #1e1e1e; padding: 25px; border-radius: 8px; width: 100%; max-width: 550px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #ccc; font-size: 14px; }
+        select, input { width: 100%; padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #00bcd4; color: #121212; border: none; padding: 12px; width: 100%; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background-color: #00acc1; }
+        .results { background-color: #252525; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #00bcd4; display: none; }
+        .results h3 { margin-top: 0; color: #00bcd4; font-size: 16px; }
+        .results p { margin: 8px 0; font-size: 14px; line-height: 1.4; }
+        .btn-volver { margin-top: 20px; color: #aaa; text-decoration: none; display: inline-block; }
+        .btn-volver:hover { color: #fff; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Calculadora de Viga de Hormigón Armado</h1>
+    <p class="subtitle">Diseño estructural y verificación reglamentaria.</p>
+
+    <div class="card">
+        <div class="form-group">
+            <label for="nom">Nomenclatura de la viga:</label>
+            <input type="text" id="nom" value="V1">
+        </div>
+
+        <div class="form-group">
+            <label for="lc">Luz de cálculo (mts):</label>
+            <input type="number" id="lc" step="0.01" placeholder="Ej: 5.0">
+        </div>
+
+        <div class="form-group">
+            <label for="b0">Base de la viga (cms):</label>
+            <input type="number" id="b0" value="20">
+        </div>
+
+        <div class="form-group">
+            <label for="tipoCarga">¿Conoce la carga por metro lineal?</label>
+            <select id="tipoCarga" onchange="cambiarCarga()">
+                <option value="no">No (Calcular según cargas arriba)</option>
+                <option value="si">Sí (Ingresar valor directo)</option>
+            </select>
+        </div>
+
+        <div class="form-group hidden" id="grupoCmlDirecto">
+            <label for="cmlDirecto">Carga por metro lineal (kg/ml):</label>
+            <input type="number" id="cmlDirecto" value="1000">
+        </div>
+
+        <div id="seccionAsistida">
+            <div class="form-group">
+                <label for="qTipo">¿Qué hay arriba de la viga?</label>
+                <select id="qTipo" onchange="cambiarTipoCarga()">
+                    <option value="le">Losa de entrepiso</option>
+                    <option value="lc">Losa de cubierta</option>
+                    <option value="ci">Cubierta inclinada</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="grupoAt">
+                <label for="at">Ancho tributario de losa (mts):</label>
+                <input type="number" id="at" value="2.5" step="0.1">
+            </div>
+
+            <div class="form-group hidden" id="grupoDvc">
+                <label for="dvc">Distancia desde viga hasta cumbrera (mts):</label>
+                <input type="number" id="dvc" value="3.0" step="0.1">
+            </div>
+
+            <div class="form-group">
+                <label for="hayMuro">¿Hay muro apoyado en la viga?</label>
+                <select id="hayMuro" onchange="cambiarMuro()">
+                    <option value="no">No</option>
+                    <option value="si">Sí</option>
+                </select>
+            </div>
+
+            <div class="form-group hidden" id="grupoMuroDetalle">
+                <label for="tipoMuro">Tipo de ladrillo:</label>
+                <select id="tipoMuro" onchange="cambiarEspesorMuro()">
+                    <option value="lco">Ladrillos Comunes</option>
+                    <option value="lh">Ladrillos Huecos</option>
+                </select>
+                <label for="ems" style="margin-top: 10px;">Espesor (cms):</label>
+                <select id="ems">
+                    <option value="15">15 cm</option>
+                    <option value="30">30 cm</option>
+                </select>
+                <label for="amm" style="margin-top: 10px;">Altura del muro (mts):</label>
+                <input type="number" id="amm" value="2.6" step="0.1">
+            </div>
+        </div>
+
+        <button onclick="calcularViga()">Calcular Viga</button>
+
+        <div id="resultados" class="results">
+            <h3>Resultados del Cálculo:</h3>
+            <div id="contenidoResultados"></div>
+        </div>
+    </div>
+
+    <a href="hormigon.html" class="btn-volver">Volver a Hormigón</a>
+
+    <script>
+        function cambiarCarga() {
+            const opu = document.getElementById('tipoCarga').value;
+            if (opu === 'si') {
+                document.getElementById('grupoCmlDirecto').classList.remove('hidden');
+                document.getElementById('seccionAsistida').classList.add('hidden');
+            } else {
+                document.getElementById('grupoCmlDirecto').classList.add('hidden');
+                document.getElementById('seccionAsistida').classList.remove('hidden');
+            }
+        }
+
+        function cambiarTipoCarga() {
+            const q = document.getElementById('qTipo').value;
+            if (q === 'ci') {
+                document.getElementById('grupoAt').classList.add('hidden');
+                document.getElementById('grupoDvc').classList.remove('hidden');
+            } else {
+                document.getElementById('grupoAt').classList.remove('hidden');
+                document.getElementById('grupoDvc').classList.add('hidden');
+            }
+        }
+
+        function cambiarMuro() {
+            const hay = document.getElementById('hayMuro').value;
+            const det = document.getElementById('grupoMuroDetalle');
+            if (hay === 'si') {
+                det.classList.remove('hidden');
+                cambiarEspesorMuro();
+            } else {
+                det.classList.add('hidden');
+            }
+        }
+
+        function cambiarEspesorMuro() {
+            const tlad = document.getElementById('tipoMuro').value;
+            const emsSelect = document.getElementById('ems');
+            emsSelect.innerHTML = '';
+            if (tlad === 'lco') {
+                emsSelect.innerHTML = '<option value="15">15 cm</option><option value="30">30 cm</option>';
+            } else {
+                emsSelect.innerHTML = '<option value="8">8 cm</option><option value="12">12 cm</option><option value="18">18 cm</option>';
+            }
+        }
+
+        function calcularViga() {
+            let nom = document.getElementById('nom').value;
+            let lc = parseFloat(document.getElementById('lc').value);
+            let b0 = parseFloat(document.getElementById('b0').value);
+            let opu = document.getElementById('tipoCarga').value;
+
+            if (!lc || lc <= 0 || !b0 || b0 <= 0) {
+                alert("Ingrese valores válidos para la luz y la base.");
+                return;
+            }
+
+            let cml = 0;
+            if (opu === 'si') {
+                cml = parseFloat(document.getElementById('cmlDirecto').value);
+            } else {
+                let qTipo = document.getElementById('qTipo').value;
+                let at = parseFloat(document.getElementById('at').value) || 0;
+                let dvc = parseFloat(document.getElementById('dvc').value) || 0;
+
+                if (qTipo === 'le') {
+                    let hlosa = (at * 2) / 25;
+                    let pp = hlosa * 2400;
+                    let cpiso = 0.08 * 1600;
+                    let cp = 100;
+                    let cm = (pp + cpiso + cp) * at;
+                    let cv = 200 * 1 * at;
+                    cml = cm + cv;
+                } else if (qTipo === 'lc') {
+                    let hlosa = (at * 2) / 25;
+                    let pp = hlosa * 2400;
+                    let cpiso = 0.08 * 1600;
+                    let cp = 100;
+                    let cm = (pp + cpiso + cp) * at;
+                    cml = cm;
+                } else if (qTipo === 'ci') {
+                    cml = dvc * 160;
+                }
+
+                let hayMuro = document.getElementById('hayMuro').value;
+                if (hayMuro === 'si') {
+                    let tlad = document.getElementById('tipoMuro').value;
+                    let ems = parseInt(document.getElementById('ems').value);
+                    let amm = parseFloat(document.getElementById('amm').value) || 0;
+                    let pez = 0;
+                    if (tlad === 'lco') {
+                        pez = (ems === 15) ? 230 : 400;
+                    } else {
+                        pez = (ems === 8) ? 70 : (ems === 12) ? 100 : 140;
+                    }
+                    cml += pez * amm;
+                }
+            }
+
+            // Lógica estructural iterativa (Simulando el loop del BASIC con redimensionamiento si Tao > 14)
+            let hinic, ppvig, q, mf, hv, hf, rarb, z, tao, tmax, sa;
+            let iteraciones = 0;
+
+            do {
+                hinic = lc / 6;
+                ppvig = (hinic * b0) / 10000 * 2400;
+                q = ppvig + cml;
+                mf = q * (lc ** 2) / 8;
+                hv = 0.375 * Math.sqrt((mf * 100) / b0);
+                hf = hv + 2.5;
+                rarb = (q * lc) / 2;
+                z = hv * 0.89;
+                tao = rarb / (b0 * z);
+
+                if (tao > 14) {
+                    b0 += 1;
+                    iteraciones++;
+                } else {
+                    break;
+                }
+            } while (iteraciones < 100);
+
+            tmax = (mf * 100) / z;
+            sa = (mf * 100) / (1200 * z);
+
+            // Búsqueda de armadura comercial (Lazo 1 simplificado para JS)
+            let fi = 10, cantbar = 1, secfit = 0, sepeb = 0;
+            for (let d = 10; d <= 30; d += 2) {
+                if (d === 14) continue;
+                let rad = (d / 10) / 2;
+                let secfi = 3.1416 * (rad ** 2);
+                let cbar = sa / secfi;
+                if (cbar - Math.floor(cbar) > 0.01) cbar = Math.floor(cbar) + 1;
+                else cbar = Math.floor(cbar);
+                let sfit = secfi * cbar;
+                let dab = cbar * (d / 10);
+                let das = (cbar - 1) * 2.5;
+                let dinec = dab + das + 5;
+                if (b0 >= dinec) {
+                    fi = d;
+                    cantbar = cbar;
+                    secfit = sfit;
+                    sepeb = (b0 - dab - 6.18) / (cantbar - 1);
+                    if (sepeb < 0) sepeb = 0;
+                    break;
+                }
+            }
+
+            // Estribos y zonas
+            let scZon = Math.floor(hf * 2);
+            let zcZon = (lc * 100) - (scZon * 2);
+            let cestp = Math.floor((lc / 2) / 0.175);
+            let eape = cestp * 680;
+            let cet = cestp * 2;
+            let cte = cet; 
+            let cbf6ing = (((hf * 2) + (b0 * 2)) / 100) * cte / 12;
+            let barest = ((cantbar + 2) * lc) / 12;
+
+            let htmlRes = `
+                VIGA = <b>${nom}</b><br>
+                Luz de cálculo = <b>${lc} mts</b><br>
+                Carga q final = <b>${q.toFixed(2)} kg/ml</b><br>
+                Reacciones RA = RB = <b>${rarb.toFixed(2)} kg</b><br>
+                Momento flector = <b>${mf.toFixed(2)} kg.m</b><br>
+                Base de viga (b0) = <b>${b0} cms</b><br>
+                Altura final (h+d) = <b>${hf.toFixed(2)} cm</b><br>
+                Esfuerzo de corte (Tao) = <b>${tao.toFixed(2)} kg/cm²</b><br>
+                Sección de armadura necesaria = <b>${sa.toFixed(2)} cm²</b><br><br>
+                <b>Armadura Principal:</b><br>
+                • N° barras = <b>${cantbar}</b> | Ø fi = <b>${fi} mm</b> | Secc. resultante = <b>${secfit.toFixed(2)} cm²</b><br>
+                • Separación entre hierros = <b>${sepeb.toFixed(1)} cm</b><br>
+                • Cantidad total de estribos = <b>${Math.floor(cte)} U</b><br>
+                • Barras para estribos Ø6 = <b>${cbf6ing.toFixed(1)} U</b><br>
+            `;
+
+            document.getElementById('contenidoResultados').innerHTML = htmlRes;
+            document.getElementById('resultados').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
