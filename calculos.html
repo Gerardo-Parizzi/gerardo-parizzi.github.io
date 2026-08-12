@@ -1,32 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="estilo.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculos Estructurales - Gerardo Parizzi</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .contenedor-botones { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .boton { background-color: #333; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; width: 300px; text-align: center; font-weight: bold; transition: background 0.3s; }
+        .boton:hover { background-color: #555; }
+        .btn-inicio { margin-top: 40px; color: #aaa; text-decoration: none; }
+    </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">Gerardo Parizzi</div>
-    </header>
+    <h1>Cálculos Estructurales</h1>
 
-    <main>
-        <h1>Cálculos Estructurales</h1>
-        <p>Análisis, dimensionamiento y resolución lógica de estructuras.</p>
-        
-        <!-- Contenido de Cálculos -->
-        <div style="margin-top: 30px; padding: 30px; border: 1px solid #ccc; background: #fff; border-radius: 8px; color: #000; text-align: left;">
-            <h3>Herramientas y Metodologías</h3>
-            <p>Espacio destinado a la formulación, cálculo de cargas, losas y elementos estructurales bajo criterios técnicos precisos.</p>
-            <p>Próximamente se detallarán las planillas y herramientas de cálculo.</p>
-        </div>
+    <div class="contenedor-botones">
+        <!-- Estos botones llevarán a las páginas específicas de cada material -->
+        <a href="hormigon.html" class="boton">Cálculo de Hormigón Armado</a>
+        <a href="hierro.html" class="boton">Cálculo de Hierro</a>
+        <a href="madera.html" class="boton">Cálculo de Madera</a>
+    </div>
 
-        <!-- Botón para volver al inicio -->
-        <div style="margin-top: 30px;">
-            <a href="index.html" class="boton" style="display: inline-block; text-decoration: none; padding: 10px 20px; background: #333; color: #fff; border-radius: 5px;">Volver al inicio</a>
-        </div>
-    </main>
+    <a href="index.html" class="btn-inicio">Volver al inicio</a>
 
 </body>
 </html>
+
