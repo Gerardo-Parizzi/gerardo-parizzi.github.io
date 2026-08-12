@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZAP 14.0 - Cálculo de Base Cuadrada Automatizada</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 700px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: auto; }
+        h2 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 14px; color: #7f8c8d; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        select, input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #3498db; color: white; border: none; padding: 10px 15px; width: 100%; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #2980b9; }
+        .results { margin-top: 20px; background: #ecf0f1; padding: 15px; border-radius: 4px; border-left: 5px solid #3498db; }
+        .hidden { display: none; }
+        hr { border: 0; border-top: 1px solid #bdc3c7; margin: 15px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>ZAP 14.0</h2>
+    <div class="subtitle">Cálculo de Base Cuadrada Automatizada</div>
+    
+    <div class="form-group">
+        <label for="bas">Nombre de la base (ej: B1):</label>
+        <input type="text" id="bas" placeholder="Ej: B1">
+    </div>
+
+    <div class="form-group">
+        <label for="qc">Valor de la carga de la columna (kg):</label>
+        <input type="number" id="qc" step="1" placeholder="Ej: 25000">
+    </div>
+
+    <div class="form-group">
+        <label for="lc">Lado de esa columna cuadrada (cms):</label>
+        <input type="number" id="lc" step="1" placeholder="Ej: 20">
+    </div>
+
+    <div class="form-group">
+        <label for="tipo_suelo">Tipo de suelo de fundación:</label>
+        <select id="tipo_suelo">
+            <option value="" disabled selected>-- Elija el tipo de suelo --</option>
+            <option value="1">1 - Suelo Firme / Tosca dura / Piedra (2.5 kg/cm²)</option>
+            <option value="2">2 - Tierra negra común seca / Arcilla semicompacta (1.5 kg/cm²)</option>
+            <option value="3">3 - Greda / Arcilla húmeda / Suelo blando (1.0 kg/cm²)</option>
+            <option value="4">4 - Arena suelta / Suelo de relleno (0.5 kg/cm²)</option>
+        </select>
+    </div>
+
+    <button onclick="calcularBase()">Calcular Cimientos</button>
+
+    <div id="resultados" class="results hidden"></div>
+</div>
+
+<script>
+function calcularBase() {
+    let bas = document.getElementById("bas").value || "Base 1";
+    let qc = parseFloat(document.getElementById("qc").value);
+    let lc = parseFloat(document.getElementById("lc").value);
+    let tipo_suelo = parseInt(document.getElementById("tipo_suelo").value);
+
+    if (isNaN(qc) || isNaN(lc) || isNaN(tipo_suelo) || qc <= 0 || lc <= 0) {
+        alert("Por favor, complete todos los campos obligatorios con valores válidos.");
+        return;
+    }
+
+    let sigt = 1.0;
+    let descSuelo = "";
+    if (tipo_suelo === 1) { sigt = 2.5; descSuelo = "Suelo Firme / Tosca (2.5 kg/cm²)"; }
+    else if (tipo_suelo === 2) { sigt = 1.5; descSuelo = "Suelo Normal (1.5 kg/cm²)"; }
+    else if (tipo_suelo === 3) { sigt = 1.0; descSuelo = "Suelo Regular / Arcilla húmeda (1.0 kg/cm²)"; }
+    else if (tipo_suelo === 4) { sigt = 0.5; descSuelo = "Suelo Arenoso / Relleno (0.5 kg/cm²)"; }
+
+    // Procesamiento matemático
+    let Gb = qc * 0.03;
+    let Gt = qc * 0.10;
+    let qt = qc + Gb + Gt;
+
+    let Sa_nec = qt / sigt;
+    let a1 = Math.sqrt(Sa_nec) + 5.08;
+    let sigt1 = qc / Sa_nec;
+
+    let F1 = (a1 - lc) / 2;
+    let Mf = (sigt1 * Math.pow(F1, 2) / 3) * (a1 + (lc / 2));
+
+    let h = 0.411 * Math.sqrt(Mf / (lc + 5));
+    let d = h + 7;
+
+    let taop = qc / (d * (lc * 4));
+
+    if (taop > 8) {
+        let mc = (a1 - lc) / 2 - d;
+        if (mc <= 0) {
+            a1 += 15;
+            Sa_nec = a1 * a1;
+            sigt1 = qc / Sa_nec;
+            F1 = (a1 - lc) / 2;
+            Mf = (sigt1 * Math.pow(F1, 2) / 3) * (a1 + (lc / 2));
+        }
+        for (let dx = 1; dx <= 50; dx++) {
+            d += 1.5;
+            taop = qc / (d * (lc * 4));
+            if (taop <= 8) break;
+        }
+    }
+
+    let mc = (a1 - lc) / 2 - d;
+    if (mc < 0) {
+        a1 += (2 * Math.abs(mc));
+        Sa_nec = a1 * a1;
+        sigt1 = qc / Sa_nec;
+        mc = (a1 - lc) / 2 - d;
+    }
+
+    let h1 = d - 7;
+    if (h1 <= 0) h1 = 5;
+    let Sa_arm = Mf / (1200 * 0.89 * h1);
+
+    let ltramo = (a1 - 7) / 100;
+    let cantbar = (a1 - 7) / 15;
+    let fracbar = cantbar - Math.floor(cantbar);
+
+    cantbar = (fracbar > 0.5) ? Math.floor(cantbar) + 1 : Math.floor(cantbar);
+    if (cantbar < 4) cantbar = 4;
+
+    let sepbar = (a1 - 7) / cantbar;
+    let diabar = Sa_arm / cantbar;
+
+    let fibar = 8;
+    if (diabar > 0.50) fibar = 10;
+    if (diabar > 0.79) fibar = 12;
+    if (diabar > 1.13) fibar = 14;
+    if (diabar > 1.54) fibar = 16;
+    if (diabar > 2.01) fibar = 18;
+    if (diabar > 2.54) fibar = 20;
+    if (diabar > 3.14) fibar = 22;
+    if (diabar > 3.80) fibar = 24;
+    if (diabar > 4.52) fibar = 25;
+
+    let longbar_total_m = (ltramo * cantbar) * 2;
+    let cant_barras_12m = Math.floor(longbar_total_m / 12) + 1;
+
+    let htmlRes = `
+        <strong>RESULTADOS FINALES BASE CUADRADA ZAP 14.0</strong><hr>
+        <strong>Nombre de la base:</strong> ${bas}<br>
+        <strong>Suelo configurado:</strong> ${descSuelo}<br>
+        <strong>Carga total con tapada:</strong> ${qt.toFixed(2)} kg<br>
+        <strong>Lado de la base final:</strong> ${a1.toFixed(1)} x ${a1.toFixed(1)} cm<br>
+        <strong>Tensión actuante real:</strong> ${sigt1.toFixed(2)} kg/cm² (Admisible: ${sigt})<br>
+        <strong>Altura final total (d):</strong> ${d.toFixed(1)} cm<br>
+        <strong>Tensión punzonamiento:</strong> ${taop.toFixed(2)} kg/cm² (Máximo: 8.0)<br>
+        <strong>Margen de bielas libre:</strong> ${mc.toFixed(1)} cm<br>
+        <strong>Sección acero necesaria:</strong> ${Sa_arm.toFixed(2)} cm²<br>
+        <hr>
+        <strong>PARRILLA DE ARMADURA RECOMENDADA:</strong><br>
+        &nbsp;&nbsp;-> Diámetro de barra comercial: Ø ${fibar} mm<br>
+        &nbsp;&nbsp;-> Cantidad de barras por lado: ${cantbar} unidades<br>
+        &nbsp;&nbsp;-> Separación entre barras: ${sepbar.toFixed(1)} cm<br>
+        &nbsp;&nbsp;-> Longitud de cada barra cortada: ${ltramo.toFixed(2)} metros<br>
+        <hr>
+        <strong>CÓMPUTO MÉTRICO DE ACERO CORRUGADO:</strong><br>
+        &nbsp;&nbsp;-> Metros lineales totales: ${longbar_total_m.toFixed(2)} m<br>
+        &nbsp;&nbsp;-> Cantidad de barras de 12 mts: ${cant_barras_12m} barras comerciales<br>
+    `;
+
+    let divRes = document.getElementById("resultados");
+    divRes.innerHTML = htmlRes;
+    divRes.classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
