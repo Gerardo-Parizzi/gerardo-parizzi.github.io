@@ -1,21 +1,33 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunicación - Gerardo Parizzi</title>
-    <link rel="stylesheet" href="estilo.css">
     <style>
-        /* Estilos específicos para el formulario de contacto */
-        .contact-form {
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #faf8f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
             background-color: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .contact-form {
+            background-color: #ffffff;
             padding: 30px;
             border-radius: 8px;
             max-width: 500px;
-            width: 100%;
-            margin-top: 20px;
+            width: 90%;
+            margin: 40px auto;
             text-align: left;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .form-group {
             margin-bottom: 20px;
@@ -24,21 +36,14 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #ddd;
         }
         .form-group input, 
         .form-group textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #444;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            background-color: #2c2c2c;
-            color: #fff;
-            font-family: Arial, sans-serif;
-        }
-        .form-group textarea {
-            resize: vertical;
-            height: 120px;
+            box-sizing: border-box;
         }
         .submit-btn {
             background-color: #333;
@@ -49,64 +54,33 @@
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            transition: background-color 0.3s;
-        }
-        .submit-btn:hover {
-            background-color: #555;
         }
     </style>
 </head>
 <body>
-
     <header>
-        <div class="logo">
-            <h1>Gerardo Parizzi</h1>
-            <p>Arquitectura y Proyectos</p>
-        </div>
+        <h1>Gerardo Parizzi</h1>
+        <p>Arquitectura y Proyectos</p>
     </header>
-
     <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h2>Comunicación</h2>
-                <p>Contacto profesional y medios para el intercambio de ideas.</p>
-            </div>
-        </section>
-
-        <!-- Formulario de contacto -->
         <div class="contact-form">
             <h3>¿Hablamos?</h3>
-            <p style="color: #bbb; font-size: 0.95em; margin-bottom: 20px;">Envíame un mensaje directo para colaboraciones o consultas sobre proyectos.</p>
-            
-            <!-- Si querés que funcione directo con tu correo sin configurar nada complejo, podés usar un servicio como Formspree reemplazando la URL en action="tu_enlace_aqui" -->
-            <form action="https://formspree.io/f/tu-codigo-aqui" method="POST">
+            <form action="https://formspree.io/f/xbjnwxyz" method="POST">
                 <div class="form-group">
                     <label for="nombre">Tu Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required placeholder="Escribe tu nombre...">
+                    <input type="text" id="nombre" name="nombre" required>
                 </div>
-
                 <div class="form-group">
                     <label for="email">Tu Correo Electrónico:</label>
-                    <input type="email" id="email" name="email" required placeholder="nombre@ejemplo.com">
+                    <input type="email" id="email" name="email" required>
                 </div>
-
                 <div class="form-group">
                     <label for="mensaje">Mensaje:</label>
-                    <textarea id="mensaje" name="mensaje" required placeholder="Escribe tu mensaje aquí..."></textarea>
+                    <textarea id="mensaje" name="mensaje" required></textarea>
                 </div>
-
                 <button type="submit" class="submit-btn">Enviar Mensaje</button>
             </form>
         </div>
-
-        <div style="margin-top: 30px;">
-            <a href="index.html" class="boton">Volver al inicio</a>
-        </div>
     </main>
-
-    <footer style="margin-top: 40px;">
-        <p>&copy; 2026 Gerardo Parizzi. Todos los derechos reservados.</p>
-    </footer>
-
 </body>
 </html>
