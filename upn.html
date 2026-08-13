@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Perfiles UPN - Gerardo Parizzi</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        h1 { margin-bottom: 20px; font-size: 22px; text-align: center; }
+        .calc-container { background-color: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); box-sizing: border-box; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-size: 14px; color: #ccc; }
+        input, select { padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 14px; }
+        button { background-color: #ff9800; color: #121212; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; transition: background 0.3s; }
+        button:hover { background-color: #e68900; }
+        .resultado { margin-top: 20px; padding: 15px; background-color: #252525; border-left: 4px solid #ff9800; border-radius: 4px; font-size: 14px; display: none; }
+        .btn-volver { margin-top: 30px; color: #aaa; text-decoration: none; font-size: 14px; }
+        .btn-volver:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <h1>Dimensionamiento de Perfiles UPN</h1>
+
+    <div class="calc-container">
+        <div class="form-group">
+            <label for="luz">Luz de cálculo (m):</label>
+            <input type="number" id="luz" step="0.1" placeholder="Ej: 3.5">
+        </div>
+        <div class="form-group">
+            <label for="carga">Carga total (kg/m):</label>
+            <input type="number" id="carga" step="10" placeholder="Ej: 400">
+        </div>
+        <div class="form-group">
+            <label for="perfil">Seleccionar Serie UPN:</label>
+            <select id="perfil">
+                <option value="80">UPN 80</option>
+                <option value="100">UPN 100</option>
+                <option value="120">UPN 120</option>
+                <option value="140">UPN 140</option>
+                <option value="160">UPN 160</option>
+                <option value="180">UPN 180</option>
+                <option value="200">UPN 200</option>
+            </select>
+        </div>
+        <button onclick="calcularUPN()">Calcular Perfil</button>
+
+        <div id="divResultado" class="resultado">
+            <strong>Resultado:</strong>
+            <p id="textoResultado"></p>
+        </div>
+    </div>
+
+    <a href="hierro.html" class="btn-volver">Volver a Estructuras Metálicas</a>
+
+    <script>
+        function calcularUPN() {
+            const luz = parseFloat(document.getElementById('luz').value);
+            const carga = parseFloat(document.getElementById('carga').value);
+            const perfil = document.getElementById('perfil').value;
+            const divRes = document.getElementById('divResultado');
+            const txtRes = document.getElementById('textoResultado');
+
+            if (!luz || !carga) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+
+            // Cálculo estimativo para UPN
+            let momentoMax = (carga * Math.pow(luz, 2)) / 8;
+            
+            divRes.style.display = "block";
+            txtRes.innerHTML = `Para una luz de ${luz} m y una carga de ${carga} kg/m, el perfil UPN ${perfil} permite un momento flector de ${momentoMax.toFixed(2)} kg·m. Verificá según tus tablas de resistencia.`;
+        }
+    </script>
+</body>
+</html>
