@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apertura de Muros - Gerardo Parizzi</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        h1 { margin-bottom: 20px; font-size: 22px; text-align: center; }
+        .calc-container { background-color: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); box-sizing: border-box; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-size: 14px; color: #ccc; }
+        input, select { padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 14px; }
+        button { background-color: #e91e63; color: #ffffff; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; transition: background 0.3s; }
+        button:hover { background-color: #c2185b; }
+        .resultado { margin-top: 20px; padding: 15px; background-color: #252525; border-left: 4px solid #e91e63; border-radius: 4px; font-size: 14px; display: none; }
+        .btn-volver { margin-top: 30px; color: #aaa; text-decoration: none; font-size: 14px; }
+        .btn-volver:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <h1>Apertura de Muros Portantes</h1>
+
+    <div class="calc-container">
+        <div class="form-group">
+            <label for="vano">Ancho de la abertura (m):</label>
+            <input type="number" id="vano" step="0.1" placeholder="Ej: 2.5">
+        </div>
+        <div class="form-group">
+            <label for="pisos">Cantidad de pisos superiores:</label>
+            <input type="number" id="pisos" step="1" placeholder="Ej: 1">
+        </div>
+        <div class="form-group">
+            <label for="perfil">Perfil de refuerzo sugerido:</label>
+            <select id="perfil">
+                <option value="doble-upn-120">Doble UPN 120</option>
+                <option value="doble-upn-140">Doble UPN 140</option>
+                <option value="doble-upn-160">Doble UPN 160</option>
+                <option value="doble-upn-200">Doble UPN 200</option>
+            </select>
+        </div>
+        <button onclick="calcularMuro()">Verificar Dintel</button>
+
+        <div id="divResultado" class="resultado">
+            <strong>Resultado:</strong>
+            <p id="textoResultado"></p>
+        </div>
+    </div>
+
+    <a href="hierro.html" class="btn-volver">Volver a Estructuras Metálicas</a>
+
+    <script>
+        function calcularMuro() {
+            const vano = parseFloat(document.getElementById('vano').value);
+            const pisos = parseInt(document.getElementById('pisos').value);
+            const perfil = document.getElementById('perfil').value;
+            const divRes = document.getElementById('divResultado');
+            const txtRes = document.getElementById('textoResultado');
+
+            if (!vano || isNaN(pisos)) {
+                alert("Por favor, completa todos los campos.");
+                return;
+            }
+
+            // Estimación de carga lineal sobre el dintel
+            let cargaLineal = pisos * 1200 + (vano * 300);
+            
+            divRes.style.display = "block";
+            txtRes.innerHTML = `Para una abertura de ${vano} m soportando ${pisos} piso(s), la carga estimada sobre el dintel es de ${cargaLineal.toFixed(0)} kg. Se evalúa el uso de ${perfil}. Recordar apuntalar antes de realizar el corte.`;
+        }
+    </script>
+</body>
+</html>
