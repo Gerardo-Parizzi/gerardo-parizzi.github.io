@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculo de Madera - Gerardo Parizzi</title>
     <style>
-        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
         h1 { margin-bottom: 20px; font-size: 22px; text-align: center; }
-        .calc-container { background-color: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-size: 14px; color: #ccc; }
-        input, select { width: 100%; padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #795548; color: #ffffff; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
+        .calc-container { background-color: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); box-sizing: border-box; }
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+        label { margin-bottom: 5px; font-size: 14px; color: #ccc; }
+        input, select { padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 14px; }
+        button { background-color: #795548; color: #ffffff; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; transition: background 0.3s; }
         button:hover { background-color: #5d4037; }
         .resultado { margin-top: 20px; padding: 15px; background-color: #252525; border-left: 4px solid #795548; border-radius: 4px; font-size: 14px; display: none; }
-        .btn-volver { margin-top: 30px; color: #aaa; text-decoration: none; }
+        .btn-volver { margin-top: 30px; color: #aaa; text-decoration: none; font-size: 14px; }
+        .btn-volver:hover { color: #fff; }
     </style>
 </head>
 <body>
@@ -45,7 +46,7 @@
         </div>
     </div>
 
-    <a href="hierro.html" class="btn-volver">Volver a Estructuras Metálicas</a>
+    <a href="calculos.html" class="btn-volver">Volver al Menú Principal</a>
 
     <script>
         function calcularMadera() {
@@ -56,15 +57,15 @@
             const txtRes = document.getElementById('textoResultado');
 
             if (!carga || !luz) {
-                alert("Completa los campos.");
+                alert("Por favor, completa todos los campos.");
                 return;
             }
 
             let resultado = "";
             if (elemento === "viga") {
-                resultado = `Para una viga de ${luz}m con ${carga}kg, verificar flexión. Sección sugerida mínima: 2" x 6".`;
+                resultado = `Para una viga de ${luz} m con una carga de ${carga} kg, verificar flexión. Sección sugerida mínima: 2" x 6".`;
             } else {
-                resultado = `Para una columna de ${luz}m con ${carga}kg, verificar pandeo. Sección sugerida mínima: 4" x 4".`;
+                resultado = `Para una columna de ${luz} m con una carga de ${carga} kg, verificar pandeo y compresión. Sección sugerida mínima: 4" x 4".`;
             }
             
             divRes.style.display = "block";
