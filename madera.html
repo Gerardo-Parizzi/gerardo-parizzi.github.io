@@ -5,15 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cálculo de Madera - Gerardo Parizzi</title>
     <style>
-        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        h1 { margin-bottom: 30px; }
-        .mensaje { color: #888; font-style: italic; }
-        .btn-volver { margin-top: 40px; color: #aaa; text-decoration: none; }
+        body { font-family: sans-serif; background-color: #121212; color: #ffffff; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        h1 { margin-bottom: 20px; font-size: 22px; text-align: center; }
+        .calc-container { background-color: #1e1e1e; border: 1px solid #333; padding: 20px; border-radius: 8px; width: 100%; max-width: 450px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-size: 14px; color: #ccc; }
+        input, select { width: 100%; padding: 10px; background-color: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #795548; color: #ffffff; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 10px; }
+        button:hover { background-color: #5d4037; }
+        .resultado { margin-top: 20px; padding: 15px; background-color: #252525; border-left: 4px solid #795548; border-radius: 4px; font-size: 14px; display: none; }
+        .btn-volver { margin-top: 30px; color: #aaa; text-decoration: none; }
     </style>
 </head>
 <body>
-    <h1>Cálculo de Madera</h1>
-    <p class="mensaje">Sección en desarrollo. Próximamente disponible.</p>
-    <a href="calculos.html" class="btn-volver">Volver a Cálculos</a>
+
+    <h1>Estructuras de Madera</h1>
+
+    <div class="calc-container">
+        <div class="form-group">
+            <label for="elemento">Tipo de elemento:</label>
+            <select id="elemento">
+                <option value="viga">Viga a Flexión</option>
+                <option value="columna">Columna a Compresión</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="carga">Carga actuante (kg):</label>
+            <input type="number" id="carga" placeholder="Ej: 500">
+        </div>
+        <div class="form-group">
+            <label for="luz">Luz o altura (m):</label>
+            <input type="number" id="luz" step="0.1" placeholder="Ej: 3">
+        </div>
+        <button onclick="calcularMadera()">Calcular Sección</button>
+
+        <div id="divResultado" class="resultado">
+            <strong>Resultado:</strong>
+            <p id="textoResultado"></p>
+        </div>
+    </div>
+
+    <a href="hierro.html" class="btn-volver">Volver a Estructuras Metálicas</a>
+
+    <script>
+        function calcularMadera() {
+            const elemento = document.getElementById('elemento').value;
+            const carga = parseFloat(document.getElementById('carga').value);
+            const luz = parseFloat(document.getElementById('luz').value);
+            const divRes = document.getElementById('divResultado');
+            const txtRes = document.getElementById('textoResultado');
+
+            if (!carga || !luz) {
+                alert("Completa los campos.");
+                return;
+            }
+
+            let resultado = "";
+            if (elemento === "viga") {
+                resultado = `Para una viga de ${luz}m con ${carga}kg, verificar flexión. Sección sugerida mínima: 2" x 6".`;
+            } else {
+                resultado = `Para una columna de ${luz}m con ${carga}kg, verificar pandeo. Sección sugerida mínima: 4" x 4".`;
+            }
+            
+            divRes.style.display = "block";
+            txtRes.innerHTML = resultado;
+        }
+    </script>
 </body>
 </html>
