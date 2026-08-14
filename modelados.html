@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelados - Gerardo Parizzi</title>
+    <link rel="stylesheet" href="style5.css">
+    <style>
+        .gallery-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; padding: 40px; }
+        .gallery-item { background: white; padding: 15px; border-radius: 12px; text-align: center; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s; width: 220px; }
+        .gallery-item:hover { transform: translateY(-5px); }
+        .gallery-item img { width: 100%; height: 160px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; }
+        .gallery-item span { font-weight: bold; color: #333; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Modelados</h1>
+            <p>Selecciona el software</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="content-section">
+        <div class="gallery-grid">
+            <!-- 1. Sketchup (Logo Rojo) -->
+            <a href="sketchup.html" class="gallery-item">
+                <img src="logo-Sketchup.jpg" alt="Sketchup">
+                <span>Sketchup</span>
+            </a>
+
+            <!-- 2. 3ds Max (Logo Verde) -->
+            <a href="max.html" class="gallery-item">
+                <img src="logo-3dmax.jpg" alt="3ds Max">
+                <span>3ds Max</span>
+            </a>
+
+            <!-- 3. Rhinoceros (Logo Negro) -->
+            <a href="rhino.html" class="gallery-item">
+                <img src="logo-Rhino.jpg" alt="Rhinoceros">
+                <span>Rhinoceros</span>
+            </a>
+        </div>
+    </section>
+</body>
+</html>
