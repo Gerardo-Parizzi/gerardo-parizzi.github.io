@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de Cálculo Estructural - Profesional</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 550px;
+            border: 1px solid #333;
+        }
+        h2 { color: #4CAF50; text-align: center; margin-bottom: 25px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: 600; }
+        select, input {
+            width: 100%; padding: 12px; background-color: #2c2c2c;
+            border: 1px solid #444; color: #fff; border-radius: 6px;
+            font-size: 16px; box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50; color: white; border: none;
+            padding: 12px 20px; margin-top: 25px; width: 100%;
+            border-radius: 6px; font-size: 16px; font-weight: bold;
+            cursor: pointer; transition: background 0.3s;
+        }
+        button:hover { background-color: #45a049; }
+        .btn-secondary { background-color: #555; margin-top: 10px; }
+        .btn-secondary:hover { background-color: #666; }
+        .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; }
+        .price-tag { font-size: 24px; color: #4CAF50; font-weight: bold; text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Asistente Estructural</h2>
+
+    <!-- PASO 1: Región -->
+    <div id="step-1" class="step active">
+        <label for="region">¿Desde qué región nos escribís?</label>
+        <select id="region">
+            <option value="ar">Argentina 🇦🇷</option>
+            <option value="ext">España / Exterior 🌍</option>
+        </select>
+        <button onclick="irAlPaso2()">Siguiente</button>
+    </div>
+
+    <!-- PASO 2: Tipo de Proyecto -->
+    <div id="step-2" class="step">
+        <label for="tipo-proyecto">¿Qué tipo de trabajo necesitás realizar?</label>
+        <select id="tipo-proyecto">
+            <option value="obra-nueva">Obra Nueva / Vivienda Completa (por m²)</option>
+            <option value="ampliacion">Ampliación / Verificación por Elementos</option>
+        </select>
+        <button onclick="irAlPaso3()">Siguiente</button>
+        <button class="btn-secondary" onclick="mostrarPaso(1)">Volver</button>
+    </div>
+
+    <!-- PASO 3: Inputs -->
+    <div id="step-3-obra" class="step">
+        <label for="superficie">Metros cuadrados (m²):</label>
+        <input type="number" id="superficie" value="100" min="10">
+        <button onclick="calcularPresupuesto()">Calcular Presupuesto</button>
+        <button class="btn-secondary" onclick="mostrarPaso(2)">Volver</button>
+    </div>
+
+    <div id="step-3-elementos" class="step">
+        <label>Losas:</label> <input type="number" id="cant-losas" value="1" min="0">
+        <label>Vigas:</label> <input type="number" id="cant-vigas" value="2" min="0">
+        <label>Columnas:</label> <input type="number" id="cant-columnas" value="2" min="0">
+        <label>Bases:</label> <input type="number" id="cant-bases" value="2" min="0">
+        <button onclick="calcularPresupuesto()">Calcular Presupuesto</button>
+        <button class="btn-secondary" onclick="mostrarPaso(2)">Volver</button>
+    </div>
+
+    <!-- PASO 4: Resultado y Pago -->
+    <div id="step-4" class="step">
+        <h3>Presupuesto Estimado</h3>
+        <div class="summary-box" id="resumen-texto"></div>
+        <div class="price-tag" id="precio-final"></div>
+        <button id="btn-pagar" onclick="irAlPago()">Realizar Pago y Acceder</button>
+        <button class="btn-secondary" onclick="mostrarPaso(2)">Modificar Datos</button>
+    </div>
+</div>
+
+<script>
+    function ocultarTodos() {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    }
+    function mostrarPaso(num) {
+        ocultarTodos();
+        if(num === 3) {
+             let tipo = document.getElementById('tipo-proyecto').value;
+             document.getElementById(tipo === 'obra-nueva' ? 'step-3-obra' : 'step-3-elementos').classList.add('active');
+        } else {
+             document.getElementById(`step-${num}`).classList.add('active');
+        }
+    }
+    function irAlPaso2() { mostrarPaso(2); }
+    function irAlPaso3() { mostrarPaso(3); }
+
+    function calcularPresupuesto() {
+        let region = document.getElementById('region').value;
+        let tipo = document.getElementById('tipo-proyecto').value;
+        let totalUSD = 0, texto = "";
+
+        if (tipo === 'obra-nueva') {
+            let m2 = parseFloat(document.getElementById('superficie').value) || 0;
+            totalUSD = m2 * 6;
+            texto = `Obra Nueva (${m2} m²).`;
+        } else {
+            let l = parseInt(document.getElementById('cant-losas').value) || 0;
+            let v = parseInt(document.getElementById('cant-vigas').value) || 0;
+            let c = parseInt(document.getElementById('cant-columnas').value) || 0;
+            let b = parseInt(document.getElementById('cant-bases').value) || 0;
+            totalUSD = Math.max((l*15)+(v*10)+(c*12)+(b*18), 50);
+            texto = `Verificación: Losas:${l}, Vigas:${v}, Col:${c}, Bas:${b}.`;
+        }
+
+        let precio = region === 'ar' ? `USD ${totalUSD} ($ ${(totalUSD * 1200).toLocaleString()} ARS)` : `USD ${totalUSD}`;
+        document.getElementById('resumen-texto').innerHTML = texto;
+        document.getElementById('precio-final').innerHTML = precio;
+        mostrarPaso(4);
+    }
+
+    function irAlPago() {
+        // Abre el pago en una pestaña nueva
+        window.open("https://link.mercadopago.com.ar/gerardoparizzi", "_blank");
+        // Redirige al menú de selección dentro de la misma carpeta calculadores
+        setTimeout(() => {
+            window.location.href = "menu_calculos.html";
+        }, 1000);
+    }
+</script>
+</body>
+</html>
+
+
