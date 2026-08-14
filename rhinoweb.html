@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Galería Rhinoceros - Gerardo Parizzi</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 40px; margin: 0; }
+        .container { background-color: white; padding: 40px; border-radius: 8px; max-width: 1100px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { border-bottom: 2px solid #333; padding-bottom: 10px; color: #111; }
+        .galeria-grid { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px; justify-content: center; }
+        .item-foto { width: 220px; background: #fff; border: 1px solid #ddd; padding: 10px; border-radius: 4px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .item-foto img { width: 100%; height: 140px; object-fit: cover; border-radius: 4px; }
+        .item-foto p { font-size: 0.85rem; color: #444; margin: 10px 0 0 0; }
+        .btn-volver { display: inline-block; margin-top: 30px; background-color: #333; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Galería: Rhinoceros</h1>
+        <div class="galeria-grid" id="gallery">
+            <!-- Se carga automáticamente -->
+        </div>
+        <a href="index.html" class="btn-volver">Volver al Inicio</a>
+    </div>
+
+    <script>
+        const imagenes = [
+            "aero-1.jpg", "aero-3.jpg", "aero-4.jpg", "aero-5.jpg", "ALTER MALL 2.jpg", 
+            "alter mall-01.jpg", "auto-01.jpg", "auto-02.jpg", "auto-03.jpg", "auto-05.jpg", 
+            "auto-06.jpg", "auto-07.jpg", "basurero-1.jpg", "bote-01.jpg", "bote-2.jpg", 
+            "bote-3.jpg", "calculos.jpg", "carro frente.jpg", "carro lateral.jpg", 
+            "carro perspectiva.jpg", "carro planta.jpg", "concept car.jpg", "copa.jpg", 
+            "DEFLECTOR 2.jpg", "DEFLECTOR.jpg", "diseño de concepto.jpg", "iglu planta.jpg", 
+            "iglu vista.jpg", "imagen1.jpg", "imagen2-02.jpg", "imagen3.jpg", "layout.jpg", 
+            "organica aerea.jpg", "organica perspectiva dos.jpg", "organica perspectiva uno.jpg", 
+            "organica planta.jpg", "organica seccion.jpg", "organica vista uno.jpg", 
+            "overcraft-1.jpg", "overcraft-2.jpg", "overcraft-3.jpg", "R-60.jpg", 
+            "R-60.plus.jpg", "rhin-01.jpg", "rhin-01-02.jpg", "rotula.jpg", 
+            "seccion longitudinal.jpg", "seccion transversal.jpg", "solar canopy.jpg", 
+            "tectonica full.jpg", "vista sur.jpg", "xray.jpg"
+        ];
+        const gallery = document.getElementById('gallery');
+        imagenes.forEach(nombre => {
+            const div = document.createElement('div');
+            div.className = 'item-foto';
+            div.innerHTML = `<img src="carpeta-rhino/${nombre}" alt="${nombre}"><p>${nombre}</p>`;
+            gallery.appendChild(div);
+        });
+    </script>
+</body>
+</html>
