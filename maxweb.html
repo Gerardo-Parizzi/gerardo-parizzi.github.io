@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>3ds Max - Gerardo Parizzi</title>
+    <link rel="stylesheet" href="style5.css">
+    <style>
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
+        .gallery-grid img { width: 100%; height: auto; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>3ds Max</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="modelados.html">Volver a Modelados</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="content-section">
+        <h2>Galería Completa</h2>
+        <div class="gallery-grid" id="gallery">
+            <!-- Las imágenes se cargarán aquí automáticamente -->
+        </div>
+    </section>
+
+    <script>
+        const imagenes = [
+            "aap-03.jpg", "acceso.jpg", "aerea.jpg", "astorga.jpg", "brug2-01.jpg", 
+            "camara-01-B.jpg", "camara-02.jpg", "camara-03.jpg", "camara-04.jpg", 
+            "camara-08-aerea.jpg", "camara-09.jpg", "catedral-interior-01.jpg", 
+            "chacabuco.jpg", "church.jpg", "conjunto.jpg", "cr-01.jpg", "cr-02.jpg", 
+            "cr-03-b.jpg", "cupula.jpg", "deh noc-03.jpg", "douglas.jpg", 
+            "el cascarudo.jpg", "Enterprise.jpg", "estudio Clorindo.jpg", 
+            "ext-cam12.jpg", "exterior igle.jpg", "final.jpg", "final-02.jpg", 
+            "final-03.jpg", "full.jpg", "goyerri-02.jpg", "gyg-saga2-04.jpg", 
+            "hotel.jpg", "iglu planta.jpg", "imagen1.jpg", "imagen3.jpg", 
+            "interior igle.jpg", "interior.jpg", "interiorchurch.jpg", 
+            "mental ray.jpg", "mimosa-01.jpg", "mirador refugios.jpg", 
+            "N3-2do PISO B.jpg", "nave-1.jpg", "nave-2.jpg", "nave-3.jpg", 
+            "naves extrañas.jpg", "nestle.jpg", "on the mountains.jpg", 
+            "pal-cam-05.jpg", "pal-cam-09.jpg", "pal-cam-10.jpg", "peatonal 1.jpg", 
+            "planta base-01.jpg", "planta general.jpg", "porsche.jpg", "puente.jpg", 
+            "rampas.jpg", "refugio.jpg", "sacapuntas-01.jpg", "sal-cam-08.jpg", 
+            "sal-ext-03.jpg", "san marón.jpg", "Scorpion.jpg", "seg-cam-01.jpg", 
+            "seg-cam-07.jpg", "seg-camara-02-02.jpg", "seg-camara-03-01.jpg", 
+            "Segovia-cam02.jpg", "Segovia-cam06b.jpg", "stand.jpg", "telus.jpg", 
+            "tilburg-gre-01.jpg", "torre-01.jpg", "torre-02.jpg", "torre-03.jpg", 
+            "transparencia.jpg", "val-02.jpg", "volador.jpg", "WIN-01.jpg", 
+            "zam-cam-01.jpg", "zam-cam-02.jpg", "Zenobia.jpg"
+        ];
+
+        const gallery = document.getElementById('gallery');
+        imagenes.forEach(nombre => {
+            const img = document.createElement('img');
+            img.src = 'carpeta-max/' + nombre;
+            img.alt = nombre;
+            gallery.appendChild(img);
+        });
+    </script>
+</body>
+</html>
