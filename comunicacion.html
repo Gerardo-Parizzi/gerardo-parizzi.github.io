@@ -3,84 +3,62 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comunicación - Gerardo Parizzi</title>
     <style>
-        body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: #faf8f5;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #1e1e1e;
-            color: #fff;
-            padding: 20px;
-            text-align: center;
-        }
-        .contact-form {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            max-width: 500px;
-            width: 90%;
-            margin: 40px auto;
-            text-align: left;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .form-group input, 
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        .submit-btn {
-            background-color: #333;
-            color: #ffffff;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 40px; }
+        .container { background-color: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; line-height: 1.6; }
+        h1 { color: #111; text-align: center; margin-bottom: 20px; }
+        p { color: #333; margin-bottom: 20px; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+        button { background-color: #3b82f6; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1rem; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #2563eb; }
+        .btn-volver { display: block; text-align: center; margin-top: 25px; color: #666; text-decoration: none; font-size: 0.9rem; }
+        .btn-volver:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Gerardo Parizzi</h1>
-        <p>Arquitectura y Proyectos</p>
-    </header>
-    <main>
-        <div class="contact-form">
-            <h3>¿Hablamos?</h3>
-            <form action="https://formspree.io/f/xoealqjd" method="POST">
-                <div class="form-group">
-                    <label for="nombre">Tu Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Tu Correo Electrónico:</label>
-                    <input type="email" id="email" name="_replyto" required>
-                </div>
-                <div class="form-group">
-                    <label for="mensaje">Mensaje:</label>
-                    <textarea id="mensaje" name="mensaje" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Enviar Mensaje</button>
-            </form>
+
+<div class="container">
+    <h1>Comunicación</h1>
+    <p>Por favor, envíe su consulta a través del siguiente formulario y a la brevedad le responderé.</p>
+    
+    <!-- Formulario resuelto con enlace dinámico mailto para evitar errores 404 -->
+    <form onsubmit="enviarCorreo(event)">
+        <div class="form-group">
+            <label>Nombre:</label>
+            <input type="text" id="nombre" required>
         </div>
-    </main>
+        <div class="form-group">
+            <label>Correo electrónico:</label>
+            <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+            <label>Comentario:</label>
+            <textarea id="mensaje" rows="5" required></textarea>
+        </div>
+        <button type="submit">Enviar Mensaje</button>
+    </form>
+
+    <a href="index.html" class="btn-volver">← Volver al inicio</a>
+</div>
+
+<script>
+function enviarCorreo(event) {
+    event.preventDefault();
+    
+    let nombre = document.getElementById("nombre").value;
+    let email = document.getElementById("email").value;
+    let mensaje = document.getElementById("mensaje").value;
+    
+    let destinatario = "geparizzi56@gmail.com";
+    let asunto = encodeURIComponent("Consulta desde la Web de: " + nombre);
+    let cuerpo = encodeURIComponent("Nombre: " + nombre + "\nEmail: " + email + "\n\nMensaje:\n" + mensaje);
+    
+    window.location.href = `mailto:${destinatario}?subject=${asunto}&body=${cuerpo}`;
+}
+</script>
+
 </body>
 </html>
