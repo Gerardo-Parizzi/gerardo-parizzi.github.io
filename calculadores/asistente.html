@@ -31,7 +31,6 @@
         .step.active { display: block; }
         label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: 600; }
         
-        /* Selects e Inputs Homogéneos */
         select, input {
             width: 100%; padding: 12px; background-color: #2c2c2c;
             border: 1px solid #444; color: #fff; border-radius: 6px;
@@ -50,7 +49,6 @@
             border-color: transparent;
         }
         
-        /* Botones del mismo ancho */
         button {
             background-color: #4CAF50; color: white; border: none;
             padding: 12px 20px; margin-top: 25px; width: 100%;
@@ -62,7 +60,6 @@
         .btn-secondary { background-color: #444; margin-top: 12px; border: 1px solid #555; }
         .btn-secondary:hover { background-color: #555; }
         
-        /* Cuadros de texto limpios */
         .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; font-size: 16px; color: #ccc; line-height: 1.5; }
         .price-tag { font-size: 26px; color: #4CAF50; font-weight: bold; text-align: center; margin: 20px 0; }
         .instruction-text { font-size: 14px; color: #ffb74d; text-align: center; margin-top: -10px; font-weight: bold; }
@@ -78,7 +75,7 @@
         <label for="region">¿Desde qué región nos escribís?</label>
         <select id="region">
             <option value="ar">Argentina 🇦🇷</option>
-            <option value="ext">España / Exterior 🌍</option>
+            <option value="ext">España / Exterior (USD / Euros) 🌍</option>
         </select>
         <button onclick="irAlPaso2()">Siguiente</button>
     </div>
@@ -124,8 +121,10 @@
 </div>
 
 <script>
-    // Valor del dólar para el cálculo en Argentina
     const VALOR_DOLAR = 1350;
+    
+    // ⚠️ Dejamos PayPal de forma genérica. Después lo cambiás por tu link propio si querés.
+    const LINK_INTERNACIONAL = "https://paypal.com"; 
 
     function ocultarTodos() {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
@@ -166,8 +165,8 @@
             document.getElementById('precio-final').innerHTML = `USD ${totalUSD} <br> <span style="font-size:18px; color:#aaa;">($ ${montoPesos.toLocaleString('es-AR')} ARS)</span>`;
             document.getElementById('cartel-instruccion').innerHTML = `⚠️ Copiá el monto en pesos para ingresarlo en la pantalla de pago.`;
         } else {
-            document.getElementById('precio-final').innerHTML = `USD ${totalUSD}`;
-            document.getElementById('cartel-instruccion').innerHTML = ``;
+            document.getElementById('precio-final').innerHTML = `USD ${totalUSD} / € ${totalUSD}`;
+            document.getElementById('cartel-instruccion').innerHTML = `⚠️ Completá el pago por el valor indicado en la plataforma internacional.`;
         }
         
         document.getElementById('resumen-texto').innerHTML = texto;
@@ -175,13 +174,22 @@
     }
 
     function irAlPago() {
+        let region = document.getElementById('region').value;
         let urlBase = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-        let urlDestinoSecreta = urlBase + "menu_calculos.html";
         
-        // Creamos el link dinámico usando tu link genérico y agregando la redirección obligatoria de Mercado Pago
-        let linkMercadoPago = "https://mercadopago.com.ar" + encodeURIComponent(urlDestinoSecreta);
+        // Saca la subcarpeta "calculadores/" para enviarlo directo a menu_calculos.html en la raíz
+        let urlDestinoSecreta = urlBase.replace("calculadores/", "") + "menu_calculos.html"; 
         
-        window.open(linkMercadoPago, "_blank");
+        if (region === 'ar') {
+            let linkMercadoPago = "https://mercadopago.com.ar" + encodeURIComponent(urlDestinoSecreta);
+            window.open(linkMercadoPago, "_blank");
+        } else {
+            window.open(LINK_INTERNACIONAL, "_blank");
+            
+            setTimeout(() => {
+                window.location.href = urlDestinoSecreta;
+            }, 2000);
+        }
     }
 </script>
 </body>
