@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asistente de Cálculo Estructural - Profesional</title>
-    <!-- Agregamos el SDK oficial de Mercado Pago -->
-    <script src="https://mercadopago.com"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -33,7 +31,7 @@
         .step.active { display: block; }
         label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: 600; }
         
-        /* Pulido visual de Selects e Inputs */
+        /* Selects e Inputs Homogéneos */
         select, input {
             width: 100%; padding: 12px; background-color: #2c2c2c;
             border: 1px solid #444; color: #fff; border-radius: 6px;
@@ -52,8 +50,8 @@
             border-color: transparent;
         }
         
-        /* Botones simétricos y homogéneos */
-        button, .mp-wallet-button {
+        /* Botones del mismo ancho */
+        button {
             background-color: #4CAF50; color: white; border: none;
             padding: 12px 20px; margin-top: 25px; width: 100%;
             border-radius: 6px; font-size: 16px; font-weight: bold;
@@ -64,12 +62,10 @@
         .btn-secondary { background-color: #444; margin-top: 12px; border: 1px solid #555; }
         .btn-secondary:hover { background-color: #555; }
         
-        /* Cajas de resumen */
-        .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; font-size: 16px; color: #ccc; }
+        /* Cuadros de texto limpios */
+        .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; font-size: 16px; color: #ccc; line-height: 1.5; }
         .price-tag { font-size: 26px; color: #4CAF50; font-weight: bold; text-align: center; margin: 20px 0; }
-        
-        /* Contenedor dinámico de Mercado Pago */
-        #wallet_container { width: 100%; margin-top: 25px; }
+        .instruction-text { font-size: 14px; color: #ffb74d; text-align: center; margin-top: -10px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -82,7 +78,7 @@
         <label for="region">¿Desde qué región nos escribís?</label>
         <select id="region">
             <option value="ar">Argentina 🇦🇷</option>
-            <option value="ext">Exterior (Pagar en USD) 🌍</option>
+            <option value="ext">España / Exterior 🌍</option>
         </select>
         <button onclick="irAlPaso2()">Siguiente</button>
     </div>
@@ -98,7 +94,7 @@
         <button class="btn-secondary" onclick="mostrarPaso(1)">Volver</button>
     </div>
 
-    <!-- PASO 3: Inputs -->
+    <!-- PASO 3: Inputs m2 -->
     <div id="step-3-obra" class="step">
         <label for="superficie">Metros cuadrados (m²):</label>
         <input type="number" id="superficie" value="100" min="10" inputmode="numeric" pattern="[0-9]*">
@@ -106,6 +102,7 @@
         <button class="btn-secondary" onclick="mostrarPaso(2)">Volver</button>
     </div>
 
+    <!-- PASO 3: Inputs Elementos -->
     <div id="step-3-elementos" class="step">
         <label>Losas:</label> <input type="number" id="cant-losas" value="1" min="0" inputmode="numeric" pattern="[0-9]*">
         <label>Vigas:</label> <input type="number" id="cant-vigas" value="2" min="0" inputmode="numeric" pattern="[0-9]*">
@@ -120,30 +117,19 @@
         <h3>Presupuesto Estimado</h3>
         <div class="summary-box" id="resumen-texto"></div>
         <div class="price-tag" id="precio-final"></div>
-        
-        <!-- Contenedor donde se dibuja el botón de pago inteligente de MP -->
-        <div id="wallet_container"></div>
-        
-        <!-- Botón alternativo para pagos internacionales (PayPal/Stripe o contacto) -->
-        <button id="btn-pago-ext" style="display:none;" onclick="irAlPagoInternacional()">Pagar con PayPal / Tarjeta Internacional</button>
-        
+        <p class="instruction-text" id="cartel-instruccion"></p>
+        <button id="btn-pagar" onclick="irAlPago()">Realizar Pago y Acceder</button>
         <button class="btn-secondary" onclick="mostrarPaso(2)">Modificar Datos</button>
     </div>
 </div>
 
 <script>
-    // VARIABLE GLOBAL: Modificá este valor cuando cambie el dólar en Argentina
-    const COTIZACION_DOLAR = 1350; 
-
-    // IMPORTANTE: Reemplazá este token de prueba por tu Public Key de producción de Mercado Pago
-    const mp = new MercadoPago('APP_USR-6f8cc592-3c82-4fdf-9fb7-c812d8a0c201', {
-        locale: 'es-AR'
-    });
+    // Valor del dólar para el cálculo en Argentina
+    const VALOR_DOLAR = 1350;
 
     function ocultarTodos() {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     }
-    
     function mostrarPaso(num) {
         ocultarTodos();
         if(num === 3) {
@@ -153,7 +139,6 @@
              document.getElementById(`step-${num}`).classList.add('active');
         }
     }
-    
     function irAlPaso2() { mostrarPaso(2); }
     function irAlPaso3() { mostrarPaso(3); }
 
@@ -175,46 +160,29 @@
             texto = `Verificación estructural detallada por elementos sueltos. Desglose solicitado: Losas: ${l}, Vigas: ${v}, Columnas: ${c}, Bases: ${b}.`;
         }
 
-        let montoPesos = totalUSD * COTIZACION_DOLAR;
-        let precioHTML = region === 'ar' ? `USD ${totalUSD} <br> <span style="font-size:18px; color:#aaa;">($ ${montoPesos.toLocaleString('es-AR')} ARS)</span>` : `USD ${totalUSD}`;
+        let montoPesos = totalUSD * VALOR_DOLAR;
+        
+        if (region === 'ar') {
+            document.getElementById('precio-final').innerHTML = `USD ${totalUSD} <br> <span style="font-size:18px; color:#aaa;">($ ${montoPesos.toLocaleString('es-AR')} ARS)</span>`;
+            document.getElementById('cartel-instruccion').innerHTML = `⚠️ Copiá el monto en pesos para ingresarlo en la pantalla de pago.`;
+        } else {
+            document.getElementById('precio-final').innerHTML = `USD ${totalUSD}`;
+            document.getElementById('cartel-instruccion').innerHTML = ``;
+        }
         
         document.getElementById('resumen-texto').innerHTML = texto;
-        document.getElementById('precio-final').innerHTML = precioHTML;
-        
-        // Limpiamos contenedores de botones previos
-        document.getElementById('wallet_container').innerHTML = "";
-        document.getElementById('btn-pago-ext').style.display = "none";
-
-        if (region === 'ar') {
-            // Lógica para Argentina: Crear la orden de Mercado Pago
-            crearPreferenciaMercadoPago(montoPesos, tipo);
-        } else {
-            // Lógica Exterior: Mostrar botón alternativo
-            document.getElementById('btn-pago-ext').style.display = "block";
-        }
-
         mostrarPaso(4);
     }
 
-    function crearPreferenciaMercadoPago(monto, tituloProyecto) {
-        // Obtenemos la URL base actual de tu GitHub Pages de forma dinámica
+    function irAlPago() {
         let urlBase = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+        let urlDestinoSecreta = urlBase + "menu_calculos.html";
         
-        // Creamos la solicitud de cobro directo para la API de Mercado Pago
-        fetch("https://mercadopago.com", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer APP_USR-8313411130616111-081718-d7b32247fb4258b6883bfdcf834dfa1d-1950293021" 
-            },
-            body: JSON.stringify({
-                items: [
-                    {
-                        title: "Cálculo Estructural - " + tituloProyecto,
-                        quantity: 1,
-                        currency_id: "ARS",
-                        unit_price: monto
-                    }
-                ],
-
-
+        // Creamos el link dinámico usando tu link genérico y agregando la redirección obligatoria de Mercado Pago
+        let linkMercadoPago = "https://mercadopago.com.ar" + encodeURIComponent(urlDestinoSecreta);
+        
+        window.open(linkMercadoPago, "_blank");
+    }
+</script>
+</body>
+</html>
