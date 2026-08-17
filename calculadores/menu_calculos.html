@@ -2,18 +2,76 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Selección de Material</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Cálculos Estructurales</title>
     <style>
-        body { background: #121212; color: #fff; text-align: center; padding: 50px; font-family: sans-serif; }
-        .boton { display: block; width: 200px; margin: 15px auto; padding: 15px; background: #4CAF50; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
-        .boton:hover { background: #45a049; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #333;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        h2 { color: #4CAF50; margin-bottom: 10px; }
+        p { color: #aaa; margin-bottom: 30px; font-size: 15px; }
+        
+        .btn-menu {
+            display: block;
+            background-color: #2c2c2c;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid #444;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        .btn-menu:hover {
+            background-color: #4CAF50;
+            border-color: #45a049;
+            transform: translateY(-2px);
+        }
+        .btn-volver {
+            background-color: #444;
+            border: 1px solid #555;
+            margin-top: 15px;
+        }
+        .btn-volver:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
-    <h2>¡Gracias por tu pago!</h2>
-    <p>¿Qué material deseas calcular hoy?</p>
-    <a href="hormigon/index.html" class="boton">Hormigón</a>
-    <a href="madera/index.html" class="boton">Madera</a>
-    <a href="metalica/index.html" class="boton">Metálica</a>
+
+<div class="container">
+    <h2>Módulos de Cálculo</h2>
+    <p>Seleccioná el material estructural para comenzar:</p>
+
+    <a href="Hormigon/menu_hormigon.html" class="btn-menu">Cálculos en Hormigón 🏗️</a>
+    <a href="Madera/menu_madera.html" class="btn-menu">Cálculos en Madera 🪵</a>
+    <a href="Metalica/menu_metalica.html" class="btn-menu">Estructuras Metálicas 🔩</a>
+    
+    <a href="asistente.html" class="btn-menu btn-volver">⬅️ Volver al Asistente</a>
+</div>
+
 </body>
 </html>
