@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asistente de Cálculo Estructural - Profesional</title>
+    <!-- Agregamos el SDK oficial de Mercado Pago -->
+    <script src="https://mercadopago.com"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,27 +26,50 @@
             width: 100%;
             max-width: 550px;
             border: 1px solid #333;
+            box-sizing: border-box;
         }
         h2 { color: #4CAF50; text-align: center; margin-bottom: 25px; }
         .step { display: none; }
         .step.active { display: block; }
         label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: 600; }
+        
+        /* Pulido visual de Selects e Inputs */
         select, input {
             width: 100%; padding: 12px; background-color: #2c2c2c;
             border: 1px solid #444; color: #fff; border-radius: 6px;
             font-size: 16px; box-sizing: border-box;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
         }
-        button {
+        select {
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://w3.org' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234CAF50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        input:focus, select:focus {
+            outline: 2px solid #4CAF50;
+            border-color: transparent;
+        }
+        
+        /* Botones simétricos y homogéneos */
+        button, .mp-wallet-button {
             background-color: #4CAF50; color: white; border: none;
             padding: 12px 20px; margin-top: 25px; width: 100%;
             border-radius: 6px; font-size: 16px; font-weight: bold;
             cursor: pointer; transition: background 0.3s;
+            box-sizing: border-box; display: block; text-align: center;
         }
         button:hover { background-color: #45a049; }
-        .btn-secondary { background-color: #555; margin-top: 10px; }
-        .btn-secondary:hover { background-color: #666; }
-        .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; }
-        .price-tag { font-size: 24px; color: #4CAF50; font-weight: bold; text-align: center; margin: 20px 0; }
+        .btn-secondary { background-color: #444; margin-top: 12px; border: 1px solid #555; }
+        .btn-secondary:hover { background-color: #555; }
+        
+        /* Cajas de resumen */
+        .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; font-size: 16px; color: #ccc; }
+        .price-tag { font-size: 26px; color: #4CAF50; font-weight: bold; text-align: center; margin: 20px 0; }
+        
+        /* Contenedor dinámico de Mercado Pago */
+        #wallet_container { width: 100%; margin-top: 25px; }
     </style>
 </head>
 <body>
@@ -57,7 +82,7 @@
         <label for="region">¿Desde qué región nos escribís?</label>
         <select id="region">
             <option value="ar">Argentina 🇦🇷</option>
-            <option value="ext">España / Exterior 🌍</option>
+            <option value="ext">Exterior (Pagar en USD) 🌍</option>
         </select>
         <button onclick="irAlPaso2()">Siguiente</button>
     </div>
@@ -76,16 +101,16 @@
     <!-- PASO 3: Inputs -->
     <div id="step-3-obra" class="step">
         <label for="superficie">Metros cuadrados (m²):</label>
-        <input type="number" id="superficie" value="100" min="10">
+        <input type="number" id="superficie" value="100" min="10" inputmode="numeric" pattern="[0-9]*">
         <button onclick="calcularPresupuesto()">Calcular Presupuesto</button>
         <button class="btn-secondary" onclick="mostrarPaso(2)">Volver</button>
     </div>
 
     <div id="step-3-elementos" class="step">
-        <label>Losas:</label> <input type="number" id="cant-losas" value="1" min="0">
-        <label>Vigas:</label> <input type="number" id="cant-vigas" value="2" min="0">
-        <label>Columnas:</label> <input type="number" id="cant-columnas" value="2" min="0">
-        <label>Bases:</label> <input type="number" id="cant-bases" value="2" min="0">
+        <label>Losas:</label> <input type="number" id="cant-losas" value="1" min="0" inputmode="numeric" pattern="[0-9]*">
+        <label>Vigas:</label> <input type="number" id="cant-vigas" value="2" min="0" inputmode="numeric" pattern="[0-9]*">
+        <label>Columnas:</label> <input type="number" id="cant-columnas" value="2" min="0" inputmode="numeric" pattern="[0-9]*">
+        <label>Bases:</label> <input type="number" id="cant-bases" value="2" min="0" inputmode="numeric" pattern="[0-9]*">
         <button onclick="calcularPresupuesto()">Calcular Presupuesto</button>
         <button class="btn-secondary" onclick="mostrarPaso(2)">Volver</button>
     </div>
@@ -95,15 +120,30 @@
         <h3>Presupuesto Estimado</h3>
         <div class="summary-box" id="resumen-texto"></div>
         <div class="price-tag" id="precio-final"></div>
-        <button id="btn-pagar" onclick="irAlPago()">Realizar Pago y Acceder</button>
+        
+        <!-- Contenedor donde se dibuja el botón de pago inteligente de MP -->
+        <div id="wallet_container"></div>
+        
+        <!-- Botón alternativo para pagos internacionales (PayPal/Stripe o contacto) -->
+        <button id="btn-pago-ext" style="display:none;" onclick="irAlPagoInternacional()">Pagar con PayPal / Tarjeta Internacional</button>
+        
         <button class="btn-secondary" onclick="mostrarPaso(2)">Modificar Datos</button>
     </div>
 </div>
 
 <script>
+    // VARIABLE GLOBAL: Modificá este valor cuando cambie el dólar en Argentina
+    const COTIZACION_DOLAR = 1350; 
+
+    // IMPORTANTE: Reemplazá este token de prueba por tu Public Key de producción de Mercado Pago
+    const mp = new MercadoPago('APP_USR-6f8cc592-3c82-4fdf-9fb7-c812d8a0c201', {
+        locale: 'es-AR'
+    });
+
     function ocultarTodos() {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     }
+    
     function mostrarPaso(num) {
         ocultarTodos();
         if(num === 3) {
@@ -113,6 +153,7 @@
              document.getElementById(`step-${num}`).classList.add('active');
         }
     }
+    
     function irAlPaso2() { mostrarPaso(2); }
     function irAlPaso3() { mostrarPaso(3); }
 
@@ -124,32 +165,56 @@
         if (tipo === 'obra-nueva') {
             let m2 = parseFloat(document.getElementById('superficie').value) || 0;
             totalUSD = m2 * 6;
-            texto = `Obra Nueva (${m2} m²).`;
+            texto = `Proyecto de obra nueva para vivienda completa abarcando un total de <strong>${m2} m²</strong>.`;
         } else {
             let l = parseInt(document.getElementById('cant-losas').value) || 0;
             let v = parseInt(document.getElementById('cant-vigas').value) || 0;
             let c = parseInt(document.getElementById('cant-columnas').value) || 0;
             let b = parseInt(document.getElementById('cant-bases').value) || 0;
             totalUSD = Math.max((l*15)+(v*10)+(c*12)+(b*18), 50);
-            texto = `Verificación: Losas:${l}, Vigas:${v}, Col:${c}, Bas:${b}.`;
+            texto = `Verificación estructural detallada por elementos sueltos. Desglose solicitado: Losas: ${l}, Vigas: ${v}, Columnas: ${c}, Bases: ${b}.`;
         }
 
-        let precio = region === 'ar' ? `USD ${totalUSD} ($ ${(totalUSD * 1200).toLocaleString()} ARS)` : `USD ${totalUSD}`;
+        let montoPesos = totalUSD * COTIZACION_DOLAR;
+        let precioHTML = region === 'ar' ? `USD ${totalUSD} <br> <span style="font-size:18px; color:#aaa;">($ ${montoPesos.toLocaleString('es-AR')} ARS)</span>` : `USD ${totalUSD}`;
+        
         document.getElementById('resumen-texto').innerHTML = texto;
-        document.getElementById('precio-final').innerHTML = precio;
+        document.getElementById('precio-final').innerHTML = precioHTML;
+        
+        // Limpiamos contenedores de botones previos
+        document.getElementById('wallet_container').innerHTML = "";
+        document.getElementById('btn-pago-ext').style.display = "none";
+
+        if (region === 'ar') {
+            // Lógica para Argentina: Crear la orden de Mercado Pago
+            crearPreferenciaMercadoPago(montoPesos, tipo);
+        } else {
+            // Lógica Exterior: Mostrar botón alternativo
+            document.getElementById('btn-pago-ext').style.display = "block";
+        }
+
         mostrarPaso(4);
     }
 
-    function irAlPago() {
-        // Abre el pago en una pestaña nueva
-        window.open("https://link.mercadopago.com.ar/gerardoparizzi", "_blank");
-        // Redirige al menú de selección dentro de la misma carpeta calculadores
-        setTimeout(() => {
-            window.location.href = "menu_calculos.html";
-        }, 1000);
-    }
-</script>
-</body>
-</html>
+    function crearPreferenciaMercadoPago(monto, tituloProyecto) {
+        // Obtenemos la URL base actual de tu GitHub Pages de forma dinámica
+        let urlBase = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+        
+        // Creamos la solicitud de cobro directo para la API de Mercado Pago
+        fetch("https://mercadopago.com", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer APP_USR-8313411130616111-081718-d7b32247fb4258b6883bfdcf834dfa1d-1950293021" 
+            },
+            body: JSON.stringify({
+                items: [
+                    {
+                        title: "Cálculo Estructural - " + tituloProyecto,
+                        quantity: 1,
+                        currency_id: "ARS",
+                        unit_price: monto
+                    }
+                ],
 
 
