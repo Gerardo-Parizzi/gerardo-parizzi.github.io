@@ -101,6 +101,9 @@
 </div>
 
 <script>
+    // Variable global para guardar el monto en pesos calculado en el momento
+    let pesosFinalesParaCobrar = 0;
+
     function ocultarTodos() {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
     }
@@ -134,7 +137,10 @@
             texto = `Verificación: Losas:${l}, Vigas:${v}, Col:${c}, Bas:${b}.`;
         }
 
-        let precio = region === 'ar' ? `USD ${totalUSD} ($ ${(totalUSD * 1200).toLocaleString()} ARS)` : `USD ${totalUSD}`;
+        // Guardamos el valor exacto en pesos multiplicando por la cotización (1200)
+        pesosFinalesParaCobrar = totalUSD * 1200;
+
+        let precio = region === 'ar' ? `USD ${totalUSD} ($ ${pesosFinalesParaCobrar.toLocaleString()} ARS)` : `USD ${totalUSD}`;
         document.getElementById('resumen-texto').innerHTML = texto;
         document.getElementById('precio-final').innerHTML = precio;
         mostrarPaso(4);
@@ -144,10 +150,10 @@
         let region = document.getElementById('region').value;
         
         if (region === 'ar') {
-            // Redirección directa y segura en la misma pestaña para evitar bloqueos móviles
-            window.location.href = "https://mercadopago.com.ar";
+            // Le inyectamos el valor de los pesos al final de la URL para automatizar el cobro
+            window.location.href = "https://mercadopago.com.ar" + pesosFinalesParaCobrar;
         } else {
-            // Redirección directa para España / Exterior a PayPal
+            // Destino tradicional para España o el exterior
             window.location.href = "https://paypal.com";
         }
     }
