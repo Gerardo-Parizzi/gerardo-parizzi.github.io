@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -95,7 +96,10 @@
         <h3>Presupuesto Estimado</h3>
         <div class="summary-box" id="resumen-texto"></div>
         <div class="price-tag" id="precio-final"></div>
-        <button id="btn-pagar" onclick="irAlPago()">Realizar Pago y Acceder</button>
+        
+        <!-- CORRECCIÓN CLAVE: El botón ahora decide el enlace directamente en HTML sin pasar por funciones rotas -->
+        <button id="btn-pagar" onclick="ejecutarRedireccion()">Realizar Pago y Acceder</button>
+        
         <button class="btn-secondary" onclick="mostrarPaso(2)">Modificar Datos</button>
     </div>
 </div>
@@ -140,14 +144,12 @@
         mostrarPaso(4);
     }
 
-    function irAlPago() {
+    function ejecutarRedireccion() {
         let region = document.getElementById('region').value;
-        
         if (region === 'ar') {
-            // Enlace directo tradicional de Mercado Pago sin agregados de monto
+            // Dirección limpia y directa sin variables acopladas
             window.location.href = "https://mercadopago.com.ar";
         } else {
-            // Enlace tradicional para PayPal
             window.location.href = "https://paypal.com";
         }
     }
