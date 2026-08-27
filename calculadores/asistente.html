@@ -44,6 +44,9 @@
         button:hover { background-color: #45a049; }
         .btn-secondary { background-color: #555; margin-top: 10px; }
         .btn-secondary:hover { background-color: #666; }
+        /* Botón verde oficial de WhatsApp corporativo */
+        .btn-whatsapp { background-color: #25D366; color: white; margin-top: 10px; }
+        .btn-whatsapp:hover { background-color: #128C7E; }
         .summary-box { background-color: #252525; padding: 15px; border-radius: 6px; border-left: 4px solid #4CAF50; margin-top: 15px; }
         .price-tag { font-size: 24px; color: #4CAF50; font-weight: bold; text-align: center; margin: 20px 0; }
     </style>
@@ -97,8 +100,10 @@
         <div class="summary-box" id="resumen-texto"></div>
         <div class="price-tag" id="precio-final"></div>
         
-        <!-- CORRECCIÓN CLAVE: El botón ahora decide el enlace directamente en HTML sin pasar por funciones rotas -->
         <button id="btn-pagar" onclick="ejecutarRedireccion()">Realizar Pago y Acceder</button>
+        
+        <!-- Botón directo de consulta técnica -->
+        <button class="btn-whatsapp" onclick="abrirWhatsapp()">Consultar dudas por WhatsApp 💬</button>
         
         <button class="btn-secondary" onclick="mostrarPaso(2)">Modificar Datos</button>
     </div>
@@ -147,11 +152,16 @@
     function ejecutarRedireccion() {
         let region = document.getElementById('region').value;
         if (region === 'ar') {
-            // Dirección limpia y directa sin variables acopladas
             window.location.href = "https://mercadopago.com.ar";
         } else {
             window.location.href = "https://paypal.com";
         }
+    }
+
+    function abrirWhatsapp() {
+        let telefono = "5493544659423"; 
+        let mensaje = encodeURIComponent("¡Hola Gerardo! Utilicé el Asistente de tu web y me gustaría coordinar una asesoría técnica por un presupuesto de cálculo estructural.");
+        window.location.href = "https://wa.me" + telefono + "?text=" + mensaje;
     }
 </script>
 </body>
