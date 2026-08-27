@@ -144,9 +144,10 @@
         let region = document.getElementById('region').value;
         
         if (region === 'ar') {
-            // Volvemos a tu enlace original directo que abre de una sin fallas en la misma pestaña
+            // Enlace directo tradicional de Mercado Pago sin agregados de monto
             window.location.href = "https://mercadopago.com.ar";
         } else {
+            // Enlace tradicional para PayPal
             window.location.href = "https://paypal.com";
         }
     }
